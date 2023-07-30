@@ -1,0 +1,62 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Section from "../layouts/Section.astro";
+
+import Card from "../components/Card.astro";
+import ThoughtCard from "../components/ThoughtCard.astro";
+import SectionHeader from "../components/SectionHeader.astro";
+import Profile from "../components/Profile.astro";
+
+import data from "../data.json";
+import profileImage from "../assets/profile-image.jpg";
+---
+
+<Layout title="Welcome to Astro.">
+  <Section>
+    <Profile
+      src={profileImage}
+      variant="large"
+      subTitle="Hey, I’m Rishabh Jain. I'm a front-end developer based in India."
+      description="Right now, I’ve just launched this minimal portfolio template you're viewing (get it here). I'm also working on my own projects, sharing my thoughts on my blog and I document my whole journey on Twitter."
+    />
+    <p class="paragraph">Get in touch →</p>
+  </Section>
+
+  <!-- PROJECTS -->
+  <Section>
+    <SectionHeader
+      title="Projects"
+      subTitle="See all"
+      variant="large"
+      linkTo="/projects"
+    />
+    {
+      data.projects.map(({ title, desc, route, year }) => (
+        <Card
+          linkTo={route}
+          title={title}
+          description={desc}
+          year={year}
+          className="my-1"
+        />
+      ))
+    }
+  </Section>
+
+  <!-- THOUGHTS -->
+  <Section>
+    <SectionHeader
+      title="Thoughts"
+      subTitle="See all"
+      variant="large"
+      linkTo="/thoughts"
+    />
+    {
+      data.thoughts.map(({ desc, route }) => (
+        <ThoughtCard linkTo={route} description={desc} className="my-1" />
+      ))
+    }
+  </Section>
+</Layout>
+
+<style></style>

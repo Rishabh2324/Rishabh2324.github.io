@@ -1,0 +1,50 @@
+{
+  "intro": {
+    "heading": "",
+    "description": ""
+  },
+  "projects": [
+    {
+      "title": "Lorem ipsum",
+      "desc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
+      "route": "#",
+      "year": "2023"
+    },
+    {
+      "title": "Lorem ipsum",
+      "desc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
+      "route": "#",
+      "year": "2023"
+    },
+    {
+      "title": "Lorem ipsum",
+      "desc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
+      "route": "#",
+      "year": "2023"
+    },
+    {
+      "title": "Lorem ipsum",
+      "desc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
+      "route": "#",
+      "year": "2023"
+    }
+  ],
+  "thoughts": [
+    {
+      "desc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
+      "route": "#"
+    },
+    {
+      "desc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
+      "route": "#"
+    },
+    {
+      "desc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
+      "route": "#"
+    },
+    {
+      "desc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
+      "route": "#"
+    }
+  ]
+}

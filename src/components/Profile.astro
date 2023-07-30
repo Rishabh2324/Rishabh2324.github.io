@@ -1,0 +1,71 @@
+---
+interface Props {
+  src: string;
+  title?: string;
+  subTitle?: string;
+  description?: string;
+  variant: "large" | "medium";
+  className?: string;
+}
+
+const {
+  title,
+  src,
+  variant,
+  className = "",
+  subTitle,
+  description,
+} = Astro.props;
+---
+
+<div class={`Profile ${className}`}>
+  <div class="Profile-section-primary my-1">
+    <img src={src} alt="profile-image" class={`Profile-image ${variant}`} />
+    <h1 class="heading-one">
+      {title}
+    </h1>
+  </div>
+  <div class="Profile-section-sec">
+    <h1 class="heading-one">
+      {subTitle}
+    </h1>
+    <p class="paragraph my-1">
+     {description}
+    </p>
+  </div>
+</div>
+
+<style>
+  .Profile {
+    display: flex;
+    flex-direction: column;
+
+    .Profile-image {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      border-radius: 100%;
+    }
+
+    .Profile-section-primary {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 400px;
+    }
+
+    .Profile-section-sec {
+      max-width: 600px;
+    }
+  }
+
+  .Profile .large {
+    width: 180px;
+    height: 180px;
+  }
+  .Profile .medium {
+    width: 100px;
+    height: 100px;
+  }
+
+</style>

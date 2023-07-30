@@ -1,0 +1,34 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Section from "../layouts/Section.astro";
+
+import Card from "../components/Card.astro";
+import SectionHeader from "../components/SectionHeader.astro";
+import Profile from "../components/Profile.astro";
+
+import data from "../data.json";
+import profileImage from "../assets/profile-image.jpg";
+---
+
+<Layout title="Welcome to Astro.">
+  <section>
+    <Profile src={profileImage} variant="large" title="Rishabh Jain" />
+  </section>
+  <!-- PROJECTS -->
+  <Section>
+    <SectionHeader title="Projects" variant="medium" />
+    {
+      data.projects.map(({ title, desc, route, year }) => (
+        <Card
+          linkTo={route}
+          title={title}
+          description={desc}
+          year={year}
+          className="my-1"
+        />
+      ))
+    }
+  </Section>
+</Layout>
+
+<style></style>

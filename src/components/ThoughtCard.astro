@@ -1,0 +1,38 @@
+---
+interface Props {
+  linkTo:string;
+  description: string;
+  className?: string;
+}
+
+const { description, className = "",linkTo } = Astro.props;
+---
+
+<div class={`ThoughtContainer ${className}`}>
+  <p class="paragraph">
+    {description}
+  </p>
+  <a href={linkTo} class="readButton links">
+    Read
+    <span> →</span>
+  </a>
+</div>
+
+<style>
+  .ThoughtContainer {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    border-bottom: solid var(--color-shade-2);
+    transition: background-color 0.5s;
+    padding: 1rem 0;
+
+    .readButton {
+      padding-left: 0.1rem;
+    }
+
+    &:hover {
+      background-color: rgba(51, 51, 51, 0.05);
+    }
+  }
+</style>

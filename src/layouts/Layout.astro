@@ -1,0 +1,130 @@
+---
+import Footer from "../components/Footer.astro";
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content="Astro description" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <title>{title}</title>
+  </head>
+  <body>
+    <div id="page-container">
+      <div id="page-content">
+        <slot />
+      </div>
+      <Footer />
+    </div>
+  </body>
+</html>
+<style is:global>
+  html {
+    font-family: "Outfit", sans-serif;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p {
+    margin: 0;
+  }
+
+  :root {
+    --bg-color-1: #f5f5f5;
+    --bg-color-2: #252525;
+
+    --color-shade-1: #252525;
+    --color-shade-2: #333;
+    --color-shade-3: #4b4b4b;
+
+    --fw-1: 700;
+    --fw-2: 500;
+
+    --fs-1: 36px;
+    --fs-2: 32px;
+    --fs-3: 24px;
+
+    --lh-1: 44.8px;
+    --lh-2: 33.6px;
+    --lh-3: 28px;
+
+    --ls-1: -1.5px;
+    --ls-2: -0.5px;
+
+    --section-padding: 24px;
+  }
+
+  .heading-one {
+    font-size: var(--fs-1);
+    font-weight: var(--fw-1);
+    letter-spacing: var(--ls-1);
+    color: var(--color-shade-1);
+    line-height: var(--lh-1);
+  }
+
+  .heading-two {
+    font-size: var(--fs-2);
+    font-weight: var(--fw-1);
+    letter-spacing: var(--ls-2);
+    color: var(--color-shade-1);
+    line-height: var(--lh-1);
+  }
+
+  .heading-three {
+    font-size: var(--fs-3);
+    font-weight: var(--fw-1);
+    color: var(--color-shade-1);
+    line-height: var(--lh-2);
+  }
+
+  .paragraph {
+    font-weight: var(--fw-2);
+    color: var(--color-shade-2);
+    line-height: var(--lh-3);
+  }
+
+  .links {
+    font-weight: var(--fw-2);
+    color: var(--color-shade-3);
+    line-height: var(--lh-3);
+  }
+
+  #page-container {
+    min-height: 100vh;
+    position: relative;
+
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 0.1rem;
+  }
+
+  #page-content {
+    padding-bottom: 5rem;
+  }
+
+  .section-padding {
+    padding: var(--section-padding) 0;
+  }
+
+  .my-1 {
+    margin: 1rem 0;
+  }
+</style>

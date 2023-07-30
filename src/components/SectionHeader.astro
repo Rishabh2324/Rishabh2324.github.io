@@ -1,0 +1,33 @@
+---
+interface Props {
+  title: string;
+  subTitle?: string;
+  variant: "large" | "medium";
+  className?: string;
+  linkTo?: string;
+}
+
+const {
+  title,
+  linkTo,
+  subTitle = "",
+  variant = "large",
+  className = "",
+} = Astro.props;
+---
+
+<div class={`SectionHeader ${className}`}>
+  <h5 class=`heading-${variant == 'large' ? 'one' : 'two'}`>{title}</h5>
+  <a class="paragraph" href={linkTo}>
+    {subTitle}
+  </a>
+</div>
+
+<style>
+  .SectionHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 0;
+  }
+</style>

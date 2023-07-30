@@ -1,0 +1,71 @@
+---
+const links = [
+  {
+    route: "/",
+    title: "Home",
+  },
+  {
+    route: "/projects",
+    title: "Lab",
+  },
+  {
+    route: "/thoughts",
+    title: "Thoughts",
+  },
+  // {
+  //   route: "/contact",
+  //   title: "Contact",
+  // },
+];
+---
+
+<div class="Footer container">
+  <div class="Footer-container">
+    <p>2023 - Rishabh Jain</p>
+    <div class="Footer-links">
+      {links.map((link) => <a class="links" href={link.route}> {link.title}</a>)}
+    </div>
+  </div>
+</div>
+
+<style>
+  .Footer {
+    border-top: solid var(--color-shade-2);
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: white;
+
+    .Footer-links {
+      display: flex;
+      justify-content: space-between;
+      width: 300px;
+    }
+
+    .Footer-container {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      padding: 1rem 0;
+    }
+
+    .readButton {
+      padding-left: 0.1rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .Footer {
+      .Footer-container {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .Footer-links {
+        padding: 1rem 0;
+      }
+    }
+  }
+</style>
