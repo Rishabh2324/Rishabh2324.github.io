@@ -3,7 +3,6 @@ import Layout from "../layouts/Layout.astro";
 import Section from "../layouts/Section.astro";
 
 import Card from "../components/Card.astro";
-import ThoughtCard from "../components/ThoughtCard.astro";
 import SectionHeader from "../components/SectionHeader.astro";
 import Profile from "../components/Profile.astro";
 
@@ -16,13 +15,34 @@ import profileImage from "../assets/profile-image.jpg";
     <Profile
       src={profileImage}
       variant="large"
-      subTitle="Hey, I’m Rishabh Jain. I'm a front-end developer based in India."
-      description="Right now, I’ve just launched this minimal portfolio template you're viewing (get it here). I'm also working on my own projects, sharing my thoughts on my blog and I document my whole journey on Twitter."
+      subTitle="Hey, I’m Rishabh Jain. I'm a Frontend Developer (WDE-2) based in India."
+      description="I have 4.5+ years of experience building scalable, config-driven UI platforms. I specialize in Vue, React, and micro-frontend architectures."
     />
-    <p class="paragraph">Get in touch →</p>
+    <a href="mailto:rishabh2401jain@gmail.com" class="paragraph links">Get in touch →</a>
   </Section>
 
-  <!-- PROJECTS -->
+  <!-- EXPERIENCE -->
+  <Section>
+    <SectionHeader
+      title="Experience"
+      subTitle="See all"
+      variant="large"
+      linkTo="/experience"
+    />
+    {
+      data.experience.map(({ title, desc, route, year }) => (
+        <Card
+          linkTo={route}
+          title={title}
+          description={desc}
+          year={year}
+          className="my-1"
+        />
+      ))
+    }
+  </Section>
+
+    <!-- PROJECTS -->
   <Section>
     <SectionHeader
       title="Projects"
@@ -39,21 +59,6 @@ import profileImage from "../assets/profile-image.jpg";
           year={year}
           className="my-1"
         />
-      ))
-    }
-  </Section>
-
-  <!-- THOUGHTS -->
-  <Section>
-    <SectionHeader
-      title="Thoughts"
-      subTitle="See all"
-      variant="large"
-      linkTo="/thoughts"
-    />
-    {
-      data.thoughts.map(({ desc, route }) => (
-        <ThoughtCard linkTo={route} description={desc} className="my-1" />
       ))
     }
   </Section>
