@@ -5,46 +5,36 @@
   },
   "projects": [
     {
-      "title": "Lorem ipsum",
-      "desc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
+      "title": "IPATC",
+      "desc": "Online platform for students to purchase courses and connect with mentors, built with React.js and Node.js. Includes a dashboard for managing services and profile.",
       "route": "#",
       "year": "2023"
     },
     {
-      "title": "Lorem ipsum",
-      "desc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
+      "title": "SAE-AKGEC",
+      "desc": "College workshop registration website built in Angular 8; led a 25-member team that conducted IoT workshops for 200+ students.",
       "route": "#",
-      "year": "2023"
-    },
-    {
-      "title": "Lorem ipsum",
-      "desc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
-      "route": "#",
-      "year": "2023"
-    },
-    {
-      "title": "Lorem ipsum",
-      "desc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
-      "route": "#",
-      "year": "2023"
+      "year": "2020"
     }
   ],
-  "thoughts": [
+  "experience": [
     {
-      "desc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
-      "route": "#"
+      "title": "Frontend Developer (WDE-2) @ Corevalue Tech",
+      "desc": "Architectured config/JSON-driven form rendering engines. Led Vue 3 tech re-platforming and built monorepo architectures for domain-specific apps.",
+      "route": "#",
+      "year": "2021 - Present"
     },
     {
-      "desc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
-      "route": "#"
+      "title": "Frontend Developer (Intern) @ Mobilize On",
+      "desc": "Developed single-page applications using vanilla JavaScript and Bootstrap. Built a mobile app using React Native and OCR recognition.",
+      "route": "#",
+      "year": "2020 - 2021"
     },
     {
-      "desc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
-      "route": "#"
-    },
-    {
-      "desc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
-      "route": "#"
+      "title": "Full Stack Developer (Freelance) @ Exiliq",
+      "desc": "Built an event registration website in Angular 8, including payment gateway integration via MongoDB and Express.",
+      "route": "#",
+      "year": "2021"
     }
   ]
 }
