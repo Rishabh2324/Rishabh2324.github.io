@@ -2,66 +2,102 @@
 import Layout from "../layouts/Layout.astro";
 import Section from "../layouts/Section.astro";
 
-import Card from "../components/Card.astro";
+import Hero from "../components/Hero.astro";
+import MetricsStrip from "../components/MetricsStrip.astro";
+import ConfigUiDemo from "../components/ConfigUiDemo.astro";
 import SectionHeader from "../components/SectionHeader.astro";
-import Profile from "../components/Profile.astro";
+import ProjectCard from "../components/ProjectCard.astro";
+import ExperienceTimeline from "../components/ExperienceTimeline.astro";
+import SkillsMatrix from "../components/SkillsMatrix.astro";
+import ContactSection from "../components/ContactSection.astro";
 
-import data from "../data.json";
-import profileImage from "../assets/profile-image.jpg";
+import { projectsData, experienceData, personalInfo } from "../data/portfolioData";
+
+const featuredProjects = projectsData.filter((p) => p.featured);
 ---
 
-<Layout title="Rishabh Jain | Portfolio">
-  <Section>
-    <Profile
-      src={profileImage}
-      variant="large"
-      subTitle="Hey, I’m Rishabh Jain. I'm a Frontend Developer (WDE-2) based in India."
-      description="I have 4.5+ years of experience building scalable, config-driven UI platforms. I specialize in Vue, React, and micro-frontend architectures."
-    />
-    <a href="mailto:rishabh2401jain@gmail.com" class="paragraph links">Get in touch →</a>
+<Layout
+  title={`${personalInfo.name} | Senior Frontend Engineer & UI Architect`}
+  description={personalInfo.tagline}
+>
+  <!-- 1. HERO SECTION -->
+  <Section spacing="sm">
+    <Hero />
   </Section>
 
-  <!-- EXPERIENCE -->
-  <Section>
-    <SectionHeader
-      title="Experience"
-      subTitle="See all"
-      variant="large"
-      linkTo="/experience"
-    />
-    {
-      data.experience.map(({ title, desc, route, year }) => (
-        <Card
-          linkTo={route}
-          title={title}
-          description={desc}
-          year={year}
-          className="my-1"
-        />
-      ))
-    }
+  <!-- 2. IMPACT METRICS STRIP -->
+  <Section spacing="sm">
+    <MetricsStrip />
   </Section>
 
-    <!-- PROJECTS -->
-  <Section>
+  <!-- 3. SIGNATURE INTERACTIVE DEMO -->
+  <Section id="interactive-demo-section" spacing="md">
     <SectionHeader
-      title="Projects"
-      subTitle="See all"
-      variant="large"
-      linkTo="/projects"
+      badge="SIGNATURE ENGINEERING"
+      title="Declarative Config-Driven UI Engine"
+      subtitle="Experience the interactive schema renderer built directly into this portfolio. Switch JSON schemas below to see real-time UI generation, cross-field validation, and reactive state sync."
+      align="left"
     />
-    {
-      data.projects.map(({ title, desc, route, year }) => (
-        <Card
-          linkTo={route}
-          title={title}
-          description={desc}
-          year={year}
-          className="my-1"
-        />
-      ))
-    }
+    <ConfigUiDemo />
+  </Section>
+
+  <!-- 4. FEATURED PROJECTS -->
+  <Section id="featured-projects" spacing="md">
+    <SectionHeader
+      badge="FEATURED WORK"
+      title="Engineering Systems &amp; Case Studies"
+      subtitle="Selected platforms, declarative UI systems, and client applications built for high performance and scale."
+      linkText="View all projects & case studies"
+      linkHref="/projects"
+    />
+    <div class="featured-projects-grid">
+      {
+        featuredProjects.map((project) => (
+          <ProjectCard project={project} featured={true} />
+        ))
+      }
+    </div>
+  </Section>
+
+  <!-- 5. CAREER EXPERIENCE TIMELINE -->
+  <Section id="experience" spacing="md">
+    <SectionHeader
+      badge="CAREER TRAJECTORY"
+      title="Engineering Experience &amp; Leadership"
+      subtitle="Track record of leading UI architecture, Vue 3 re-platforming, and cross-functional frontend delivery."
+      linkText="View comprehensive career roadmap"
+      linkHref="/experience"
+    />
+    <ExperienceTimeline experiences={experienceData} />
+  </Section>
+
+  <!-- 6. SKILLS & TECHNICAL ARSENAL -->
+  <Section id="skills" spacing="md">
+    <SectionHeader
+      badge="TECHNICAL CAPABILITIES"
+      title="Architectural &amp; Engineering Arsenal"
+      subtitle="Core specializations spanning declarative UI architectures, modern frontend frameworks, performance profiling, and design systems."
+      align="left"
+    />
+    <SkillsMatrix />
+  </Section>
+
+  <!-- 7. CONTACT & OUTREACH -->
+  <Section id="contact" spacing="md">
+    <ContactSection />
   </Section>
 </Layout>
 
-<style></style>
+<style>
+  .featured-projects-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.75rem;
+  }
+
+  @media (max-width: 840px) {
+    .featured-projects-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

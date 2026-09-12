@@ -1,71 +1,221 @@
 ---
-const links = [
-  {
-    route: "/",
-    title: "Home",
-  },
-  {
-    route: "/projects",
-    title: "Lab",
-  },
-  {
-    route: "/thoughts",
-    title: "Thoughts",
-  },
-  // {
-  //   route: "/contact",
-  //   title: "Contact",
-  // },
-];
+import { personalInfo } from "../data/portfolioData";
+const currentYear = new Date().getFullYear();
 ---
 
-<div class="Footer container">
-  <div class="Footer-container">
-    <p>2023 - Rishabh Jain</p>
-    <div class="Footer-links">
-      {links.map((link) => <a class="links" href={link.route}> {link.title}</a>)}
+<footer class="site-footer">
+  <div class="container footer-container">
+    <!-- Top Footer Row -->
+    <div class="footer-top-row">
+      <!-- Brand & Mission -->
+      <div class="footer-brand-block">
+        <a href="/" class="footer-brand">
+          <div class="brand-monogram">RJ</div>
+          <span class="brand-name">{personalInfo.name}</span>
+        </a>
+        <p class="footer-tagline">
+          {personalInfo.tagline}
+        </p>
+        <div class="location-pill">
+          <span class="status-dot"></span>
+          <span>Based in {personalInfo.location} • Available Globally</span>
+        </div>
+      </div>
+
+      <!-- Quick Links Navigation -->
+      <div class="footer-nav-groups">
+        <div class="nav-group">
+          <span class="nav-group-title font-mono">NAVIGATION</span>
+          <ul class="nav-group-list">
+            <li><a href="/" class="footer-link">Overview</a></li>
+            <li><a href="/#interactive-demo" class="footer-link">Interactive Demo</a></li>
+            <li><a href="/projects" class="footer-link">Projects &amp; Case Studies</a></li>
+            <li><a href="/experience" class="footer-link">Career Experience</a></li>
+            <li><a href="/#skills" class="footer-link">Technical Arsenal</a></li>
+          </ul>
+        </div>
+
+        <div class="nav-group">
+          <span class="nav-group-title font-mono">CONNECT</span>
+          <ul class="nav-group-list">
+            <li><a href={personalInfo.github} target="_blank" rel="noopener noreferrer" class="footer-link">GitHub</a></li>
+            <li><a href={personalInfo.linkedin} target="_blank" rel="noopener noreferrer" class="footer-link">LinkedIn</a></li>
+            <li><a href={`mailto:${personalInfo.email}`} class="footer-link">Email Inbox</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Copyright & Back-to-Top Row -->
+    <div class="footer-bottom-row">
+      <p class="copyright-text font-mono">
+        © {currentYear} {personalInfo.name}. Crafted with Astro &amp; Vanilla CSS.
+      </p>
+
+      <button id="back-to-top-btn" class="back-to-top-btn font-mono" aria-label="Back to top of page">
+        <span>Back to Top</span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="19" x2="12" y2="5"></line>
+          <polyline points="5 12 12 5 19 12"></polyline>
+        </svg>
+      </button>
     </div>
   </div>
-</div>
+</footer>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const backToTopBtn = document.getElementById("back-to-top-btn");
+    backToTopBtn?.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  });
+</script>
 
 <style>
-  .Footer {
-    border-top: solid var(--color-shade-2);
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: white;
+  .site-footer {
+    border-top: 1px solid var(--border-subtle);
+    background: var(--bg-surface);
+    padding: 4rem 0 2rem 0;
+    position: relative;
+    z-index: 10;
+  }
 
-    .Footer-links {
-      display: flex;
-      justify-content: space-between;
-      width: 300px;
-    }
+  .footer-container {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+  }
 
-    .Footer-container {
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-      padding: 1rem 0;
-    }
+  .footer-top-row {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 3rem;
+    align-items: flex-start;
+  }
 
-    .readButton {
-      padding-left: 0.1rem;
-    }
+  .footer-brand-block {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-width: 450px;
+  }
+
+  .footer-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .brand-monogram {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-full);
+    background: var(--gradient-primary);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 0.75rem;
+  }
+
+  .brand-name {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--text-primary);
+  }
+
+  .footer-tagline {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  .location-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.785rem;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+  }
+
+  .footer-nav-groups {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+
+  .nav-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .nav-group-title {
+    font-size: 0.75rem;
+    color: var(--text-primary);
+    font-weight: 700;
+    letter-spacing: 0.05em;
+  }
+
+  .nav-group-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .footer-link {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    transition: color var(--transition-fast);
+  }
+
+  .footer-link:hover {
+    color: var(--accent-primary);
+  }
+
+  .footer-bottom-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-subtle);
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .copyright-text {
+    font-size: 0.785rem;
+    color: var(--text-muted);
+  }
+
+  .back-to-top-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: var(--bg-surface-elevated);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+    padding: 0.4rem 0.8rem;
+    border-radius: var(--radius-full);
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .back-to-top-btn:hover {
+    color: var(--text-primary);
+    border-color: var(--border-medium);
+    transform: translateY(-2px);
   }
 
   @media (max-width: 768px) {
-    .Footer {
-      .Footer-container {
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-      }
-
-      .Footer-links {
-        padding: 1rem 0;
-      }
+    .footer-top-row {
+      grid-template-columns: 1fr;
+      gap: 2rem;
     }
   }
 </style>

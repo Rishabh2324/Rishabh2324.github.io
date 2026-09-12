@@ -1,0 +1,430 @@
+---
+import Profile from "./Profile.astro";
+import { personalInfo } from "../data/portfolioData";
+import profileImage from "../assets/profile-image.jpg";
+---
+
+<div class="hero-section">
+  <div class="hero-content">
+    <!-- Status Pill -->
+    <div class="status-pill-wrapper">
+      <div class="status-pill glass-card">
+        <span class="status-dot"></span>
+        <span class="status-text">{personalInfo.status}</span>
+      </div>
+    </div>
+
+    <!-- Main Headline -->
+    <h1 class="hero-title">
+      Engineering scalable <span class="accent-gradient-text">UI systems</span> &amp; declarative platforms.
+    </h1>
+
+    <!-- Elevator Pitch Bio -->
+    <p class="hero-bio">
+      Hey, I'm <strong class="text-highlight">{personalInfo.name}</strong> — a <strong class="text-highlight">Frontend Engineer (WDE-2)</strong> with {personalInfo.yearsOfExperience} years of experience architecting config-driven dynamic form engines, micro-frontends, and high-performance Vue 3 &amp; React web applications.
+    </p>
+
+    <!-- CTAs & Action Buttons -->
+    <div class="hero-actions">
+      <a href="#featured-projects" class="btn btn-primary">
+        <span>Explore Work</span>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+          <polyline points="12 5 19 12 12 19"></polyline>
+        </svg>
+      </a>
+
+      <a href="#interactive-demo" class="btn btn-secondary">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="var(--accent-cyan)"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+        </svg>
+        <span>Live Schema Demo</span>
+      </a>
+
+      <button id="hero-copy-email-btn" class="btn btn-ghost copy-btn" data-email={personalInfo.email}>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+        </svg>
+        <span class="copy-text">Copy Email</span>
+      </button>
+    </div>
+
+    <!-- Tech Stack Pill Group -->
+    <div class="tech-pills">
+      <span class="tech-pill-label">Core Specializations:</span>
+      <span class="badge badge-accent">Config-Driven UI</span>
+      <span class="badge">Vue 3 / React</span>
+      <span class="badge">Micro-frontends</span>
+      <span class="badge">Turborepo / Monorepo</span>
+      <span class="badge">TypeScript</span>
+    </div>
+  </div>
+
+  <!-- Right Side Visual / Profile Showcase -->
+  <div class="hero-visual">
+    <div class="visual-card-wrapper">
+      <Profile src={profileImage} size="xl" />
+
+      <!-- Floating Architectural Badge Card -->
+      <div class="floating-badge glass-card spotlight-card">
+        <div class="floating-badge-header">
+          <div class="mini-pulse"></div>
+          <span class="font-mono text-xs">ARCH_SPEC // WDE-2</span>
+        </div>
+        <p class="floating-badge-title">Declarative UI Engine</p>
+        <div class="floating-badge-metrics">
+          <span class="metric-chip">~70% Faster Authoring</span>
+          <span class="metric-chip">35% Less Bundle</span>
+        </div>
+      </div>
+
+      <!-- Quick Social Icons Row -->
+      <div class="hero-social-links">
+        <a
+          href={personalInfo.github}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="social-btn glass-card"
+          aria-label="GitHub Profile"
+          title="GitHub Profile"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+          </svg>
+        </a>
+        <a
+          href={personalInfo.linkedin}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="social-btn glass-card"
+          aria-label="LinkedIn Profile"
+          title="LinkedIn Profile"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+            <rect x="2" y="9" width="4" height="12"></rect>
+            <circle cx="4" cy="4" r="2"></circle>
+          </svg>
+        </a>
+        <a
+          href={`mailto:${personalInfo.email}`}
+          class="social-btn glass-card"
+          aria-label="Send Email"
+          title="Send Email"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+            <polyline points="22,6 12,13 2,6"></polyline>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Email copy feedback
+  document.addEventListener("DOMContentLoaded", () => {
+    const copyBtn = document.getElementById("hero-copy-email-btn");
+    copyBtn?.addEventListener("click", async () => {
+      const email = copyBtn.getAttribute("data-email");
+      if (!email) return;
+      try {
+        await navigator.clipboard.writeText(email);
+        const textSpan = copyBtn.querySelector(".copy-text");
+        if (textSpan) {
+          const original = textSpan.textContent;
+          textSpan.textContent = "Copied to Clipboard!";
+          copyBtn.classList.add("copied");
+          setTimeout(() => {
+            textSpan.textContent = original;
+            copyBtn.classList.remove("copied");
+          }, 2200);
+        }
+      } catch (err) {
+        console.error("Failed to copy email", err);
+      }
+    });
+  });
+</script>
+
+<style>
+  .hero-section {
+    display: grid;
+    grid-template-columns: 1.3fr 0.9fr;
+    gap: 3.5rem;
+    align-items: center;
+    padding: 1.5rem 0 3rem 0;
+  }
+
+  .hero-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .status-pill-wrapper {
+    display: flex;
+  }
+
+  .status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.35rem 0.95rem;
+    border-radius: var(--radius-full);
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+  }
+
+  .status-text {
+    font-size: 0.825rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    letter-spacing: -0.01em;
+  }
+
+  .hero-title {
+    color: var(--text-primary);
+    line-height: 1.15;
+  }
+
+  .hero-bio {
+    font-size: 1.125rem;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    max-width: 600px;
+  }
+
+  .text-highlight {
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+
+  .hero-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    flex-wrap: wrap;
+    padding-top: 0.25rem;
+  }
+
+  .copy-btn.copied {
+    color: var(--accent-emerald) !important;
+    border-color: var(--accent-emerald) !important;
+  }
+
+  .tech-pills {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--border-subtle);
+  }
+
+  .tech-pill-label {
+    font-size: 0.8rem;
+    font-family: var(--font-mono);
+    color: var(--text-muted);
+    margin-right: 0.25rem;
+  }
+
+  /* Right Side Visual */
+  .hero-visual {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .visual-card-wrapper {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .floating-badge {
+    position: absolute;
+    bottom: 30px;
+    right: -45px;
+    padding: 0.85rem 1.1rem;
+    border-radius: var(--radius-lg);
+    background: var(--bg-surface-elevated);
+    border: 1px solid var(--border-medium);
+    box-shadow: var(--shadow-lg);
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    width: 220px;
+    animation: floatBadge 4s ease-in-out infinite;
+  }
+
+  @keyframes floatBadge {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-8px); }
+  }
+
+  .floating-badge-header {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .mini-pulse {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent-cyan);
+    box-shadow: 0 0 8px var(--accent-cyan);
+  }
+
+  .text-xs {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    font-weight: 600;
+  }
+
+  .floating-badge-title {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  .floating-badge-metrics {
+    display: flex;
+    gap: 0.35rem;
+    flex-wrap: wrap;
+    margin-top: 0.2rem;
+  }
+
+  .metric-chip {
+    font-size: 0.68rem;
+    font-family: var(--font-mono);
+    background: var(--accent-glow);
+    color: var(--accent-primary);
+    padding: 0.15rem 0.45rem;
+    border-radius: 4px;
+    font-weight: 600;
+  }
+
+  .hero-social-links {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .social-btn {
+    width: 42px;
+    height: 42px;
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
+    transition: all var(--transition-fast);
+  }
+
+  .social-btn:hover {
+    color: var(--accent-primary);
+    transform: translateY(-2px);
+    border-color: var(--border-hover);
+  }
+
+  @media (max-width: 960px) {
+    .hero-section {
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+      text-align: center;
+    }
+
+    .hero-content {
+      align-items: center;
+    }
+
+    .hero-bio {
+      margin: 0 auto;
+    }
+
+    .hero-actions {
+      justify-content: center;
+    }
+
+    .tech-pills {
+      justify-content: center;
+    }
+
+    .floating-badge {
+      right: -10px;
+      bottom: 20px;
+    }
+  }
+
+  @media (max-width: 540px) {
+    .floating-badge {
+      display: none;
+    }
+  }
+</style>

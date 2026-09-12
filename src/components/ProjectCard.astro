@@ -1,0 +1,250 @@
+---
+import type { ProjectItem } from "../data/portfolioData";
+
+interface Props {
+  project: ProjectItem;
+  featured?: boolean;
+}
+
+const { project, featured = false } = Astro.props;
+---
+
+<article class={`project-card glass-card spotlight-card ${featured ? "is-featured" : ""}`} id={`project-${project.id}`}>
+  <!-- Card Header -->
+  <div class="card-header">
+    <div class="category-meta">
+      <span class="badge badge-accent">{project.category}</span>
+      <span class="font-mono text-muted text-xs">{project.year}</span>
+    </div>
+    {project.role && <span class="badge font-mono role-badge">{project.role}</span>}
+  </div>
+
+  <!-- Main Title & Subtitle -->
+  <div class="card-title-section">
+    <h3 class="card-title">{project.title}</h3>
+    <p class="card-subtitle">{project.subtitle}</p>
+  </div>
+
+  <!-- Description -->
+  <p class="card-desc">{project.description}</p>
+
+  <!-- Impact / Highlights List -->
+  {
+    project.impact && project.impact.length > 0 && (
+      <div class="highlights-box">
+        <span class="highlights-title font-mono">KEY IMPACT:</span>
+        <ul class="highlights-list">
+          {project.impact.map((point) => (
+            <li class="highlight-item">
+              <span class="check-icon">✓</span>
+              <span>{point}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )
+  }
+
+  <!-- Tech Stack Chips -->
+  <div class="tech-stack-row">
+    {
+      project.techStack.map((tech) => (
+        <span class="tech-tag font-mono">{tech}</span>
+      ))
+    }
+  </div>
+
+  <!-- Card Action Links -->
+  <div class="card-footer-actions">
+    {
+      project.demoUrl && (
+        <a
+          href={project.demoUrl}
+          class="btn btn-primary card-btn"
+          target={project.demoUrl.startsWith("http") ? "_blank" : undefined}
+          rel={project.demoUrl.startsWith("http") ? "noopener noreferrer" : undefined}
+        >
+          <span>{project.demoUrl.startsWith("#") ? "Try Live Demo" : "View Project"}</span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <line x1="7" y1="17" x2="17" y2="7"></line>
+            <polyline points="7 7 17 7 17 17"></polyline>
+          </svg>
+        </a>
+      )
+    }
+
+    {
+      project.githubUrl && (
+        <a
+          href={project.githubUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn btn-secondary card-btn"
+          aria-label={`GitHub repository for ${project.title}`}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+          </svg>
+          <span>Repository</span>
+        </a>
+      )
+    }
+  </div>
+</article>
+
+<style>
+  .project-card {
+    padding: 1.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    height: 100%;
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-xl);
+  }
+
+  .is-featured {
+    border-color: rgba(99, 102, 241, 0.25);
+    background: linear-gradient(180deg, var(--bg-card) 0%, var(--bg-surface-elevated) 100%);
+  }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .category-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .role-badge {
+    font-size: 0.7rem;
+    background: var(--bg-surface-elevated);
+    border-color: var(--border-medium);
+    color: var(--text-secondary);
+  }
+
+  .text-xs {
+    font-size: 0.75rem;
+  }
+
+  .card-title-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .card-title {
+    color: var(--text-primary);
+    font-size: 1.35rem;
+    line-height: 1.25;
+  }
+
+  .card-subtitle {
+    font-size: 0.875rem;
+    color: var(--accent-cyan);
+    font-weight: 500;
+  }
+
+  .card-desc {
+    font-size: 0.925rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    flex-grow: 1;
+  }
+
+  .highlights-box {
+    background: var(--bg-surface-elevated);
+    border: 1px solid var(--border-subtle);
+    padding: 0.85rem 1rem;
+    border-radius: var(--radius-md);
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .highlights-title {
+    font-size: 0.7rem;
+    color: var(--accent-emerald);
+    font-weight: 700;
+  }
+
+  .highlights-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .highlight-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    font-size: 0.825rem;
+    color: var(--text-secondary);
+    line-height: 1.4;
+  }
+
+  .check-icon {
+    color: var(--accent-emerald);
+    font-weight: 800;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+  }
+
+  .tech-stack-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: auto;
+  }
+
+  .tech-tag {
+    font-size: 0.725rem;
+    background: var(--bg-surface-elevated);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+    padding: 0.2rem 0.55rem;
+    border-radius: var(--radius-sm);
+  }
+
+  .card-footer-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--border-subtle);
+    flex-wrap: wrap;
+  }
+
+  .card-btn {
+    padding: 0.5rem 0.95rem;
+    font-size: 0.825rem;
+  }
+</style>
