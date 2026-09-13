@@ -50,7 +50,7 @@ const featuredProjects = projectsData.filter((p) => p.featured);
       linkText="View all projects & case studies"
       linkHref="/projects"
     />
-    <div class="featured-projects-grid">
+    <div class="featured-projects-grid" data-reveal-group>
       {
         featuredProjects.map((project) => (
           <ProjectCard project={project} featured={true} />

@@ -3,7 +3,7 @@ import { personalInfo } from "../data/portfolioData";
 ---
 
 <div class="contact-section-wrapper" id="contact">
-  <div class="contact-card glass-card spotlight-card">
+  <div class="contact-card glass-card spotlight-card" data-reveal>
     <div class="contact-layout">
       <!-- Left Column: Narrative & Direct Outreach -->
       <div class="contact-info-col">
@@ -118,7 +118,9 @@ import { personalInfo } from "../data/portfolioData";
 </div>
 
 <script>
-  document.addEventListener("DOMContentLoaded", () => {
+  import { onReady } from "../scripts/motion-utils";
+
+  function initContact() {
     // Copy button
     const copyBtn = document.getElementById("contact-copy-email-btn");
     copyBtn?.addEventListener("click", async () => {
@@ -132,6 +134,7 @@ import { personalInfo } from "../data/portfolioData";
           textSpan.textContent = "Copied!";
           setTimeout(() => {
             textSpan.textContent = original;
+            copyBtn.classList.remove("copied");
           }, 2000);
         }
       } catch (err) {
@@ -157,7 +160,9 @@ import { personalInfo } from "../data/portfolioData";
       const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`);
       window.location.href = `mailto:rishabh2401jain@gmail.com?subject=${subject}&body=${body}`;
     });
-  });
+  }
+
+  onReady(initContact);
 </script>
 
 <style>
@@ -174,7 +179,7 @@ import { personalInfo } from "../data/portfolioData";
 
   .contact-layout {
     display: grid;
-    grid-template-columns: 1.2fr 1fr;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
     gap: 3rem;
     align-items: center;
   }
@@ -183,6 +188,7 @@ import { personalInfo } from "../data/portfolioData";
     display: flex;
     flex-direction: column;
     gap: 1.25rem;
+    min-width: 0;
   }
 
   .contact-title {
@@ -329,7 +335,7 @@ import { personalInfo } from "../data/portfolioData";
 
   @media (max-width: 900px) {
     .contact-layout {
-      grid-template-columns: 1fr;
+      grid-template-columns: minmax(0, 1fr);
       gap: 2rem;
     }
     .contact-card {

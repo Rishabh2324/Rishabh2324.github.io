@@ -5,7 +5,7 @@ import profileImage from "../assets/profile-image.jpg";
 ---
 
 <div class="hero-section">
-  <div class="hero-content">
+  <div class="hero-content" data-reveal-group>
     <!-- Status Pill -->
     <div class="status-pill-wrapper">
       <div class="status-pill glass-card">
@@ -92,7 +92,7 @@ import profileImage from "../assets/profile-image.jpg";
   </div>
 
   <!-- Right Side Visual / Profile Showcase -->
-  <div class="hero-visual">
+  <div class="hero-visual" data-reveal>
     <div class="visual-card-wrapper">
       <Profile src={profileImage} size="xl" />
 
@@ -184,8 +184,10 @@ import profileImage from "../assets/profile-image.jpg";
 </div>
 
 <script>
+  import { onReady } from "../scripts/motion-utils";
+
   // Email copy feedback
-  document.addEventListener("DOMContentLoaded", () => {
+  function initHero() {
     const copyBtn = document.getElementById("hero-copy-email-btn");
     copyBtn?.addEventListener("click", async () => {
       const email = copyBtn.getAttribute("data-email");
@@ -206,7 +208,9 @@ import profileImage from "../assets/profile-image.jpg";
         console.error("Failed to copy email", err);
       }
     });
-  });
+  }
+
+  onReady(initHero);
 </script>
 
 <style>
@@ -391,6 +395,12 @@ import profileImage from "../assets/profile-image.jpg";
     color: var(--accent-primary);
     transform: translateY(-2px);
     border-color: var(--border-hover);
+  }
+
+  @media (max-width: 1180px) {
+    .floating-badge {
+      right: 0;
+    }
   }
 
   @media (max-width: 960px) {

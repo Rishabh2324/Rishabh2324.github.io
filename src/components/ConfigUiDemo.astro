@@ -2,7 +2,7 @@
 import { demoSchemas } from "../data/portfolioData";
 ---
 
-<div id="interactive-demo" class="demo-wrapper">
+<div id="interactive-demo" class="demo-wrapper" data-reveal>
   <div class="demo-header-badge-row">
     <span class="badge badge-cyan">LIVE ARCHITECTURE DEMO</span>
     <span class="demo-pill-tag font-mono">Vue 3 / Reactive JSON-Schema Paradigm</span>
@@ -19,6 +19,7 @@ import { demoSchemas } from "../data/portfolioData";
         <span>SCHEMA PRESETS:</span>
       </div>
       <div class="preset-buttons">
+        <span class="tab-glide preset-glide" aria-hidden="true"></span>
         {
           demoSchemas.map((schemaItem, index) => (
             <button
@@ -124,7 +125,7 @@ import { demoSchemas } from "../data/portfolioData";
 
 <script define:vars={{ demoSchemas }}>
   // Client-side Reactive Engine Simulation
-  document.addEventListener("DOMContentLoaded", () => {
+  function initDemoEngine() {
     let currentSchemaIndex = 0;
     let currentFormData = {};
 
@@ -300,7 +301,68 @@ import { demoSchemas } from "../data/portfolioData";
 
     // Initialize first schema
     renderSchema(0);
-  });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initDemoEngine);
+  } else {
+    initDemoEngine();
+  }
+</script>
+
+<script>
+  import { gsap } from "gsap";
+  import { EASE, initHoverGlide, onReady, prefersReducedMotion } from "../scripts/motion-utils";
+
+  function initDemoMotion() {
+    const presetButtonsWrap = document.querySelector<HTMLElement>(".preset-buttons");
+    const presetGlide = document.querySelector<HTMLElement>(".preset-glide");
+    const presetButtons = Array.from(document.querySelectorAll<HTMLElement>(".preset-btn"));
+    initHoverGlide(presetButtonsWrap, presetGlide, presetButtons);
+
+    if (prefersReducedMotion()) return;
+
+    // Cross-fade the generated fields and code preview whenever the
+    // reactive engine re-renders them (schema switch or reset).
+    const dynamicFieldsTarget = document.getElementById("dynamic-fields-target");
+    if (dynamicFieldsTarget) {
+      const fieldsObserver = new MutationObserver(() => {
+        const groups = Array.from(dynamicFieldsTarget.children) as HTMLElement[];
+        if (groups.length === 0) return;
+        gsap.fromTo(
+          groups,
+          { opacity: 0, y: 10 },
+          { opacity: 1, y: 0, duration: 0.35, stagger: 0.05, ease: EASE }
+        );
+      });
+      fieldsObserver.observe(dynamicFieldsTarget, { childList: true });
+    }
+
+    const schemaJsonDisplay = document.getElementById("schema-json-display");
+    if (schemaJsonDisplay) {
+      const codeObserver = new MutationObserver(() => {
+        gsap.fromTo(schemaJsonDisplay, { opacity: 0.3 }, { opacity: 1, duration: 0.4, ease: EASE });
+      });
+      codeObserver.observe(schemaJsonDisplay, { characterData: true, childList: true, subtree: true });
+    }
+
+    // Pop the validation toast in with a snappy ease instead of a hard display flip.
+    const feedbackToast = document.getElementById("form-feedback-toast");
+    if (feedbackToast) {
+      const toastObserver = new MutationObserver(() => {
+        if (feedbackToast.style.display === "flex") {
+          gsap.fromTo(
+            feedbackToast,
+            { opacity: 0, y: 12, scale: 0.97 },
+            { opacity: 1, y: 0, scale: 1, duration: 0.35, ease: EASE }
+          );
+        }
+      });
+      toastObserver.observe(feedbackToast, { attributes: true, attributeFilter: ["style"] });
+    }
+  }
+
+  onReady(initDemoMotion);
 </script>
 
 <style>
@@ -353,12 +415,28 @@ import { demoSchemas } from "../data/portfolioData";
   }
 
   .preset-buttons {
+    position: relative;
     display: flex;
     gap: 0.5rem;
     flex-wrap: wrap;
   }
 
+  .preset-glide {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    opacity: 0;
+    background: var(--bg-surface-elevated);
+    border-radius: var(--radius-full);
+    pointer-events: none;
+    z-index: 0;
+  }
+
   .preset-btn {
+    position: relative;
+    z-index: 1;
     padding: 0.4rem 0.85rem;
     font-size: 0.825rem;
     font-weight: 600;
@@ -385,7 +463,7 @@ import { demoSchemas } from "../data/portfolioData";
   /* Dual Pane Workspace */
   .demo-workspace {
     display: grid;
-    grid-template-columns: 1fr 1.1fr;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
     min-height: 380px;
   }
 
@@ -394,6 +472,7 @@ import { demoSchemas } from "../data/portfolioData";
     border-right: 1px solid var(--border-subtle);
     display: flex;
     flex-direction: column;
+    min-width: 0;
   }
 
   [data-theme="light"] .schema-pane {
@@ -406,6 +485,7 @@ import { demoSchemas } from "../data/portfolioData";
     display: flex;
     flex-direction: column;
     padding: 0;
+    min-width: 0;
   }
 
   .pane-header {
@@ -464,6 +544,7 @@ import { demoSchemas } from "../data/portfolioData";
     flex-direction: column;
     gap: 1.25rem;
     flex: 1;
+    min-width: 0;
   }
 
   .fields-target {
@@ -657,7 +738,7 @@ import { demoSchemas } from "../data/portfolioData";
 
   @media (max-width: 900px) {
     .demo-workspace {
-      grid-template-columns: 1fr;
+      grid-template-columns: minmax(0, 1fr);
     }
 
     .schema-pane {

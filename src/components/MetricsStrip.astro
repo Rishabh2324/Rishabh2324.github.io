@@ -2,12 +2,12 @@
 import { metricsData } from "../data/portfolioData";
 ---
 
-<div class="metrics-strip">
+<div class="metrics-strip" data-reveal-group>
   {
     metricsData.map((metric) => (
       <div class="metric-card glass-card spotlight-card">
         <div class="metric-header">
-          <span class="metric-value accent-gradient-text">{metric.value}</span>
+          <span class="metric-value accent-gradient-text" data-count>{metric.value}</span>
           <div class="metric-icon-wrap">
             {metric.icon === "clock" && (
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">

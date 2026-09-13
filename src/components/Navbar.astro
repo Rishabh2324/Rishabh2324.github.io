@@ -25,26 +25,29 @@ const navLinks = [
     </a>
 
     <!-- Desktop Nav Links -->
-    <ul class="nav-links">
-      {
-        navLinks.map((link) => {
-          const isActive =
-            link.href === "/"
-              ? currentPath === "/"
-              : !link.href.startsWith("/#") && currentPath.startsWith(link.href);
-          return (
-            <li>
-              <a
-                href={link.href}
-                class={`nav-link ${isActive ? "active" : ""}`}
-              >
-                {link.label}
-              </a>
-            </li>
-          );
-        })
-      }
-    </ul>
+    <div class="nav-links-wrap">
+      <span class="tab-glide nav-glide" aria-hidden="true"></span>
+      <ul class="nav-links">
+        {
+          navLinks.map((link) => {
+            const isActive =
+              link.href === "/"
+                ? currentPath === "/"
+                : !link.href.startsWith("/#") && currentPath.startsWith(link.href);
+            return (
+              <li>
+                <a
+                  href={link.href}
+                  class={`nav-link ${isActive ? "active" : ""}`}
+                >
+                  {link.label}
+                </a>
+              </li>
+            );
+          })
+        }
+      </ul>
+    </div>
 
     <!-- Actions: Theme Toggle & Resume / Contact CTA -->
     <div class="nav-actions">
@@ -152,23 +155,74 @@ const navLinks = [
 </header>
 
 <script>
+  import { gsap } from "gsap";
+  import { EASE, initHoverGlide, onReady, prefersReducedMotion } from "../scripts/motion-utils";
+
   // Navbar Interactivity
-  document.addEventListener("DOMContentLoaded", () => {
+  function initNavbar() {
     // Theme toggle handling
     const themeToggleBtn = document.getElementById("theme-toggle");
-    
+
     themeToggleBtn?.addEventListener("click", () => {
       const currentTheme = document.documentElement.getAttribute("data-theme") || "dark";
       const nextTheme = currentTheme === "dark" ? "light" : "dark";
-      
+
       document.documentElement.setAttribute("data-theme", nextTheme);
       localStorage.setItem("theme", nextTheme);
     });
 
+    // Desktop nav hover glide
+    const navLinksWrap = document.querySelector<HTMLElement>(".nav-links-wrap");
+    const navGlide = document.querySelector<HTMLElement>(".nav-glide");
+    const navLinkEls = Array.from(document.querySelectorAll<HTMLElement>(".nav-link"));
+    initHoverGlide(navLinksWrap, navGlide, navLinkEls);
+
     // Mobile menu toggle handling
     const mobileBtn = document.getElementById("mobile-menu-btn");
     const mobileDrawer = document.getElementById("mobile-drawer");
+    const drawerContent = document.querySelector<HTMLElement>(".mobile-drawer-content");
     const mobileLinks = document.querySelectorAll(".mobile-nav-link");
+    const drawerAnimatedEls = Array.from(
+      document.querySelectorAll<HTMLElement>(".mobile-nav-link, .mobile-drawer-footer .btn")
+    );
+    const hamburgerLines = Array.from(
+      mobileBtn?.querySelectorAll<HTMLElement>(".hamburger-line") ?? []
+    );
+    const [topLine, midLine, bottomLine] = hamburgerLines;
+    const iconEase = "back.out(2)";
+
+    const animateIcon = (open: boolean) => {
+      if (prefersReducedMotion() || !topLine || !midLine || !bottomLine) return;
+      if (open) {
+        gsap.to(topLine, { y: 6, rotate: 45, duration: 0.4, ease: iconEase });
+        gsap.to(midLine, { opacity: 0, x: -6, duration: 0.2, ease: EASE });
+        gsap.to(bottomLine, { y: -6, rotate: -45, duration: 0.4, ease: iconEase });
+      } else {
+        gsap.to(topLine, { y: 0, rotate: 0, duration: 0.4, ease: iconEase });
+        gsap.to(midLine, { opacity: 1, x: 0, duration: 0.2, ease: EASE });
+        gsap.to(bottomLine, { y: 0, rotate: 0, duration: 0.4, ease: iconEase });
+      }
+    };
+
+    const animateDrawerOpen = () => {
+      if (prefersReducedMotion() || !drawerContent) return;
+      gsap.fromTo(
+        drawerContent,
+        { opacity: 0, y: -14 },
+        { opacity: 1, y: 0, duration: 0.35, ease: EASE }
+      );
+      gsap.fromTo(
+        drawerAnimatedEls,
+        { opacity: 0, y: 10 },
+        { opacity: 1, y: 0, duration: 0.4, stagger: 0.05, delay: 0.08, ease: EASE }
+      );
+    };
+
+    const animateDrawerClose = () => {
+      if (prefersReducedMotion() || !drawerContent) return;
+      gsap.to(drawerAnimatedEls, { opacity: 0, y: 8, duration: 0.2, stagger: 0.03, ease: EASE });
+      gsap.to(drawerContent, { opacity: 0, y: -10, duration: 0.25, ease: EASE });
+    };
 
     const toggleMenu = (open?: boolean) => {
       const isOpen = open !== undefined ? open : mobileBtn?.getAttribute("aria-expanded") !== "true";
@@ -176,10 +230,13 @@ const navLinks = [
       mobileBtn?.classList.toggle("open", isOpen);
       mobileDrawer?.classList.toggle("open", isOpen);
       mobileDrawer?.setAttribute("aria-hidden", String(!isOpen));
+      animateIcon(isOpen);
       if (isOpen) {
         document.body.style.overflow = "hidden";
+        animateDrawerOpen();
       } else {
         document.body.style.overflow = "";
+        animateDrawerClose();
       }
     };
 
@@ -195,7 +252,9 @@ const navLinks = [
         toggleMenu(false);
       }
     });
-  });
+  }
+
+  onReady(initNavbar);
 </script>
 
 <style>
@@ -272,7 +331,26 @@ const navLinks = [
   }
 
   /* Nav Links */
+  .nav-links-wrap {
+    position: relative;
+  }
+
+  .nav-glide {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    opacity: 0;
+    background: var(--bg-surface-elevated);
+    border-radius: var(--radius-full);
+    pointer-events: none;
+    z-index: 0;
+  }
+
   .nav-links {
+    position: relative;
+    z-index: 1;
     display: flex;
     align-items: center;
     gap: 0.25rem;
@@ -280,17 +358,18 @@ const navLinks = [
   }
 
   .nav-link {
+    position: relative;
+    display: inline-block;
     padding: 0.45rem 0.85rem;
     font-size: 0.875rem;
     font-weight: 500;
     color: var(--text-secondary);
     border-radius: var(--radius-full);
-    transition: all var(--transition-fast);
+    transition: color var(--transition-fast);
   }
 
   .nav-link:hover {
     color: var(--text-primary);
-    background: var(--bg-surface-elevated);
   }
 
   .nav-link.active {
@@ -359,17 +438,21 @@ const navLinks = [
     height: 2px;
     background-color: var(--text-primary);
     border-radius: 2px;
-    transition: all var(--transition-fast);
   }
 
-  .mobile-toggle.open .hamburger-line:nth-child(1) {
-    transform: translateY(6px) rotate(45deg);
-  }
-  .mobile-toggle.open .hamburger-line:nth-child(2) {
-    opacity: 0;
-  }
-  .mobile-toggle.open .hamburger-line:nth-child(3) {
-    transform: translateY(-6px) rotate(-45deg);
+  /* JS (motion) animates the open/close transform on these lines. This
+     fallback only kicks in when the user prefers reduced motion, since the
+     script skips animating them in that case. */
+  @media (prefers-reduced-motion: reduce) {
+    .mobile-toggle.open .hamburger-line:nth-child(1) {
+      transform: translateY(6px) rotate(45deg);
+    }
+    .mobile-toggle.open .hamburger-line:nth-child(2) {
+      opacity: 0;
+    }
+    .mobile-toggle.open .hamburger-line:nth-child(3) {
+      transform: translateY(-6px) rotate(-45deg);
+    }
   }
 
   /* Mobile Drawer */
@@ -382,7 +465,7 @@ const navLinks = [
       display: none;
     }
 
-    .nav-cta {
+    .nav-actions .nav-cta {
       display: none;
     }
 
@@ -439,6 +522,12 @@ const navLinks = [
     .mobile-nav-link:hover {
       color: var(--text-primary);
       background: var(--bg-surface-elevated);
+    }
+  }
+
+  @media (max-width: 360px) {
+    .brand-role {
+      display: none;
     }
   }
 </style>

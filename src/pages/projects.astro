@@ -30,7 +30,7 @@ const categories = [
         <span>Back to Overview</span>
       </a>
 
-      <div class="page-title-block">
+      <div class="page-title-block" data-reveal>
         <span class="badge badge-accent">PORTFOLIO SHOWCASE</span>
         <h1 class="page-title">
           Projects &amp; <span class="accent-gradient-text">Architectural Systems</span>
@@ -43,6 +43,7 @@ const categories = [
       <!-- Filter Tabs -->
       <div class="filter-tabs-wrapper">
         <div class="filter-tabs" role="tablist">
+          <span class="tab-glide" aria-hidden="true"></span>
           {
             categories.map((cat, i) => (
               <button
@@ -62,7 +63,7 @@ const categories = [
 
   <!-- Projects Grid -->
   <Section spacing="sm">
-    <div class="all-projects-grid" id="projects-grid">
+    <div class="all-projects-grid" id="projects-grid" data-reveal-group>
       {
         projectsData.map((project) => (
           <div class="project-grid-item" data-category={project.category}>
@@ -80,10 +81,17 @@ const categories = [
 </Layout>
 
 <script>
+  import { gsap } from "gsap";
+  import { EASE, initHoverGlide, onReady, prefersReducedMotion } from "../scripts/motion-utils";
+
   // Project filtering logic
-  document.addEventListener("DOMContentLoaded", () => {
-    const filterBtns = document.querySelectorAll(".filter-tab-btn");
-    const projectItems = document.querySelectorAll(".project-grid-item");
+  function initProjects() {
+    const filterBtns = Array.from(document.querySelectorAll<HTMLElement>(".filter-tab-btn"));
+    const projectItems = Array.from(document.querySelectorAll<HTMLElement>(".project-grid-item"));
+    const filterTabs = document.querySelector<HTMLElement>(".filter-tabs");
+    const tabGlide = document.querySelector<HTMLElement>(".tab-glide");
+
+    initHoverGlide(filterTabs, tabGlide, filterBtns);
 
     filterBtns.forEach((btn) => {
       btn.addEventListener("click", () => {
@@ -98,18 +106,30 @@ const categories = [
         btn.setAttribute("aria-selected", "true");
 
         // Filter projects
+        const matched: HTMLElement[] = [];
         projectItems.forEach((item) => {
           const itemCategory = item.getAttribute("data-category");
-          if (selectedCategory === "All" || itemCategory === selectedCategory) {
-            (item as HTMLElement).style.display = "block";
-            (item as HTMLElement).style.animation = "fadeIn 0.3s ease";
+          const isMatch = selectedCategory === "All" || itemCategory === selectedCategory;
+          if (isMatch) {
+            item.style.display = "block";
+            matched.push(item);
           } else {
-            (item as HTMLElement).style.display = "none";
+            item.style.display = "none";
           }
         });
+
+        if (prefersReducedMotion()) return;
+
+        gsap.fromTo(
+          matched,
+          { opacity: 0, y: 16 },
+          { opacity: 1, y: 0, duration: 0.45, stagger: 0.05, ease: EASE }
+        );
       });
     });
-  });
+  }
+
+  onReady(initProjects);
 </script>
 
 <style>
@@ -159,6 +179,7 @@ const categories = [
   }
 
   .filter-tabs {
+    position: relative;
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
@@ -168,7 +189,22 @@ const categories = [
     border-radius: var(--radius-full);
   }
 
+  .tab-glide {
+    position: absolute;
+    top: 0.35rem;
+    bottom: 0.35rem;
+    left: 0;
+    width: 0;
+    opacity: 0;
+    background: var(--bg-surface-elevated);
+    border-radius: var(--radius-full);
+    pointer-events: none;
+    z-index: 0;
+  }
+
   .filter-tab-btn {
+    position: relative;
+    z-index: 1;
     padding: 0.5rem 1rem;
     font-size: 0.85rem;
     font-weight: 600;
