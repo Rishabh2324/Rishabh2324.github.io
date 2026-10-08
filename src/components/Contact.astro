@@ -1,0 +1,186 @@
+---
+import { personalInfo } from "../data/portfolioData";
+---
+
+<section id="contact" class="section contact" data-scene='{"x":0,"y":-0.05,"scale":1.2,"intensity":1,"hue":0.95,"distort":0.5}'>
+  <div class="container contact__inner">
+    <p class="eyebrow" data-reveal>(06) — Contact</p>
+
+    <h2 class="contact__title">
+      <span class="contact__line" data-split="chars">Let's build</span>
+      <span class="contact__line" data-split="chars">something <span class="serif accent">unreal.</span></span>
+    </h2>
+
+    <div class="contact__row">
+      <p class="lead" data-reveal>{personalInfo.status}. Tell me what you're building. I usually reply within a day.</p>
+
+      <a href={`mailto:${personalInfo.email}`} class="contact__orb" data-magnetic="0.45" data-cursor="Say hi">
+        <span class="contact__orb-inner" data-magnetic-inner>
+          <span>Get in</span>
+          <span class="serif">touch</span>
+        </span>
+      </a>
+    </div>
+
+    <ul class="contact__links" data-reveal="stagger">
+      <li>
+        <button type="button" class="contact__link" data-copy={personalInfo.email} data-cursor="Copy">
+          <span class="mono">Email</span>
+          <span class="contact__value">{personalInfo.email}</span>
+          <span class="contact__hint mono" data-copy-hint>Copy</span>
+        </button>
+      </li>
+      <li>
+        <a class="contact__link" href={personalInfo.github} target="_blank" rel="noopener">
+          <span class="mono">GitHub</span>
+          <span class="contact__value">@Rishabh2324</span>
+          <span class="contact__hint mono">↗</span>
+        </a>
+      </li>
+      <li>
+        <a class="contact__link" href={personalInfo.linkedin} target="_blank" rel="noopener">
+          <span class="mono">LinkedIn</span>
+          <span class="contact__value">in/rishabhjain2324</span>
+          <span class="contact__hint mono">↗</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<style>
+  .contact {
+    min-height: 100svh;
+    display: flex;
+    align-items: center;
+  }
+
+  .contact__inner {
+    display: grid;
+    gap: clamp(2rem, 4vw, 3.5rem);
+  }
+
+  .contact__title {
+    display: grid;
+    font-size: clamp(3.25rem, 11vw, 11rem);
+    font-weight: 600;
+    line-height: 0.9;
+    letter-spacing: -0.06em;
+  }
+
+  .contact__line:nth-child(2) {
+    padding-left: 0.6em;
+  }
+
+  .contact__title .serif {
+    letter-spacing: -0.03em;
+  }
+
+  .contact__row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+  }
+
+  .contact__orb {
+    display: grid;
+    place-items: center;
+    width: clamp(9rem, 16vw, 13rem);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-size: clamp(1.1rem, 1.6vw, 1.4rem);
+    font-weight: 500;
+    line-height: 1;
+    box-shadow: 0 0 80px rgba(200, 255, 77, 0.25);
+    transition: box-shadow 0.6s var(--ease-out);
+  }
+
+  .contact__orb:hover {
+    box-shadow: 0 0 120px rgba(200, 255, 77, 0.5);
+  }
+
+  .contact__orb-inner {
+    display: grid;
+    text-align: center;
+    gap: 0.15rem;
+  }
+
+  .contact__orb .serif {
+    font-size: 1.35em;
+  }
+
+  .contact__links {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    border-top: 1px solid var(--line);
+  }
+
+  .contact__link {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0.4rem 1rem;
+    width: 100%;
+    padding: 1.5rem 1.5rem 1.5rem 0;
+    text-align: left;
+    transition: color 0.3s;
+  }
+
+  .contact__links li + li .contact__link {
+    padding-left: 1.5rem;
+    border-left: 1px solid var(--line);
+  }
+
+  .contact__link .mono {
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .contact__value {
+    grid-column: 1 / -1;
+    font-size: clamp(1rem, 1.5vw, 1.3rem);
+    overflow-wrap: anywhere;
+    transition: color 0.3s;
+  }
+
+  .contact__hint {
+    grid-row: 1;
+    grid-column: 2;
+  }
+
+  .contact__link:hover .contact__value {
+    color: var(--accent);
+  }
+
+  @media (max-width: 760px) {
+    .contact__links {
+      grid-template-columns: 1fr;
+    }
+
+    .contact__links li + li .contact__link {
+      padding-left: 0;
+      border-left: 0;
+      border-top: 1px solid var(--line);
+    }
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>("[data-copy]").forEach((btn) => {
+    const hint = btn.querySelector<HTMLElement>("[data-copy-hint]");
+    btn.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(btn.dataset.copy!);
+        if (hint) hint.textContent = "Copied ✓";
+      } catch {
+        location.href = `mailto:${btn.dataset.copy}`;
+      }
+      setTimeout(() => hint && (hint.textContent = "Copy"), 2000);
+    });
+  });
+</script>

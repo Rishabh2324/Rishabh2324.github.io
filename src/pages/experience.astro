@@ -1,192 +1,40 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import Section from "../layouts/Section.astro";
-import SectionHeader from "../components/SectionHeader.astro";
-import ExperienceTimeline from "../components/ExperienceTimeline.astro";
-import ContactSection from "../components/ContactSection.astro";
-
+import Journey from "../components/Journey.astro";
+import Skills from "../components/Skills.astro";
+import Contact from "../components/Contact.astro";
 import { experienceData, personalInfo } from "../data/portfolioData";
 ---
 
-<Layout
-  title={`Career Experience & Roadmap | ${personalInfo.name}`}
-  description="Explore the professional engineering trajectory, architectural milestones, and leadership history of Rishabh Jain."
->
-  <Section spacing="sm">
-    <!-- Breadcrumb & Header -->
-    <div class="experience-page-hero">
-      <a href="/" class="back-link">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="19" y1="12" x2="5" y2="12"></line>
-          <polyline points="12 19 5 12 12 5"></polyline>
-        </svg>
-        <span>Back to Overview</span>
-      </a>
-
-      <div class="page-title-block" data-reveal>
-        <span class="badge badge-emerald">CAREER MILESTONES</span>
-        <h1 class="page-title">
-          Engineering Trajectory &amp; <span class="accent-gradient-text">Leadership</span>
-        </h1>
-        <p class="page-subtitle">
-          Over 4.5+ years of driving frontend architectural decisions, leading Vue 3 re-platforming initiatives, engineering dynamic form rendering engines, and building resilient monorepo foundations.
-        </p>
-      </div>
+<Layout title={`Experience — ${personalInfo.name}`} description="Career roadmap: UI architecture, Vue 3 re-platforming and frontend leadership.">
+  <section class="section page-head" data-scene='{"x":0.48,"y":0.2,"scale":0.8,"hue":0.6,"intensity":1,"distort":0.3}'>
+    <div class="container">
+      <p class="eyebrow" data-reveal>Career roadmap — {personalInfo.yearsOfExperience} years</p>
+      <h1 class="display page-head__title" data-split="chars">Experi<span class="serif">ence</span></h1>
+      <p class="lead" data-reveal>
+        {experienceData.length} roles across UI architecture, Vue 3 re-platforming, micro-frontends and full-stack delivery,
+        from internship to leading frontend architecture.
+      </p>
     </div>
-  </Section>
+  </section>
 
-  <!-- Key Architectural Pillars Summary -->
-  <Section spacing="sm">
-    <div class="architectural-pillars-grid" data-reveal-group>
-      <div class="pillar-card glass-card spotlight-card">
-        <div class="pillar-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
-            <polyline points="2 17 12 22 22 17"></polyline>
-            <polyline points="2 12 12 17 22 12"></polyline>
-          </svg>
-        </div>
-        <div class="pillar-content">
-          <h3>Declarative UI Architecture</h3>
-          <p>Pioneered config/JSON schema engines that cut repetitive frontend authoring time by ~70% across enterprise teams.</p>
-        </div>
-      </div>
-
-      <div class="pillar-card glass-card spotlight-card">
-        <div class="pillar-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
-            <polyline points="17 6 23 6 23 12"></polyline>
-          </svg>
-        </div>
-        <div class="pillar-content">
-          <h3>Modern Re-Platforming</h3>
-          <p>Led end-to-end migration to Vue 3 (Composition API, Pinia, TypeScript), reducing bundle overhead by 35% and elevating runtime reactivity.</p>
-        </div>
-      </div>
-
-      <div class="pillar-card glass-card spotlight-card">
-        <div class="pillar-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-            <circle cx="9" cy="7" r="4"></circle>
-            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-          </svg>
-        </div>
-        <div class="pillar-content">
-          <h3>Engineering Mentorship</h3>
-          <p>Mentored developers on component design patterns, TypeScript strict typing, state machines, and web accessibility standards.</p>
-        </div>
-      </div>
-    </div>
-  </Section>
-
-  <!-- Complete Career Timeline -->
-  <Section spacing="sm">
-    <SectionHeader
-      badge="DETAILED ROLES"
-      title="Professional Experience"
-      subtitle="Detailed breakdown of companies, responsibilities, technical stacks, and organizational outcomes."
-      align="left"
-    />
-    <ExperienceTimeline experiences={experienceData} showAll={true} />
-  </Section>
-
-  <!-- Contact CTA -->
-  <Section spacing="md">
-    <ContactSection />
-  </Section>
+  <Journey full index="(01)" />
+  <Skills />
+  <Contact />
 </Layout>
 
 <style>
-  .experience-page-hero {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-    padding-top: 1rem;
+  .page-head {
+    padding-top: clamp(9rem, 18vw, 14rem);
+    padding-bottom: 0;
   }
 
-  .back-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: var(--text-muted);
-    transition: color var(--transition-fast);
-  }
-
-  .back-link:hover {
-    color: var(--accent-primary);
-    transform: translateX(-2px);
-  }
-
-  .page-title-block {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    max-width: 800px;
-  }
-
-  .page-title {
-    line-height: 1.15;
-  }
-
-  .page-subtitle {
-    font-size: 1.15rem;
-    color: var(--text-secondary);
-    line-height: 1.65;
-  }
-
-  .architectural-pillars-grid {
+  .page-head .container {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.5rem;
-    margin: 1rem 0;
+    gap: 1.75rem;
   }
 
-  .pillar-card {
-    padding: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    background: var(--bg-card);
-    border-radius: var(--radius-xl);
-  }
-
-  .pillar-icon {
-    width: 44px;
-    height: 44px;
-    border-radius: var(--radius-md);
-    background: var(--accent-glow);
-    color: var(--accent-primary);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid rgba(99, 102, 241, 0.2);
-  }
-
-  .pillar-content {
-    display: flex;
-    flex-direction: column;
-    gap: 0.4rem;
-  }
-
-  .pillar-content h3 {
-    font-size: 1.1rem;
-    color: var(--text-primary);
-  }
-
-  .pillar-content p {
-    font-size: 0.875rem;
-    color: var(--text-secondary);
-    line-height: 1.55;
-  }
-
-  @media (max-width: 860px) {
-    .architectural-pillars-grid {
-      grid-template-columns: 1fr;
-    }
+  .page-head__title {
+    font-size: clamp(3.5rem, 14vw, 13rem);
   }
 </style>

@@ -276,40 +276,54 @@ export const skillsData: SkillCategory[] = [
   },
 ];
 
+/**
+ * Schemas for the live config-driven UI engine on the home page.
+ * Supported field types: text, email, select, range, checkbox, output.
+ * `visibleWhen` adds conditional branching; `output` fields are computed
+ * declaratively from other fields (base + Σ value × coefficient).
+ */
 export const demoSchemas = [
   {
     id: "user-onboarding",
-    name: "Enterprise User Onboarding",
-    description: "Conditional form with dynamic role selection and real-time field validation.",
+    name: "Onboarding",
+    description: "Conditional branching and real-time validation.",
     schema: {
-      title: "Create Workspace Account",
+      title: "Create workspace account",
       fields: [
         {
           id: "fullName",
-          label: "Full Name",
+          label: "Full name",
           type: "text",
-          placeholder: "e.g. Alex Rivera",
+          placeholder: "Alex Rivera",
           required: true,
           validation: { minLength: 3 },
         },
         {
+          id: "workEmail",
+          label: "Work email",
+          type: "email",
+          placeholder: "alex@company.com",
+          required: true,
+        },
+        {
           id: "roleType",
-          label: "Primary Role",
+          label: "Primary role",
           type: "select",
-          options: ["Frontend Architect", "Product Designer", "Engineering Manager", "Full Stack Developer"],
+          options: ["Frontend Architect", "Product Designer", "Engineering Manager"],
           defaultValue: "Frontend Architect",
         },
         {
-          id: "experienceLevel",
-          label: "Years of Experience",
+          id: "reports",
+          label: "Direct reports",
           type: "range",
           min: 1,
-          max: 15,
-          defaultValue: 5,
+          max: 30,
+          defaultValue: 6,
+          visibleWhen: { field: "roleType", equals: "Engineering Manager" },
         },
         {
-          id: "enableNotifications",
-          label: "Enable Architecture Updates & Release Alerts",
+          id: "releaseAlerts",
+          label: "Release alerts",
           type: "checkbox",
           defaultValue: true,
         },
@@ -318,60 +332,74 @@ export const demoSchemas = [
   },
   {
     id: "pricing-calculator",
-    name: "SaaS Plan Configurator",
-    description: "Interactive reactive calculator with immediate compute triggers.",
+    name: "Pricing",
+    description: "Declarative computed outputs that react instantly.",
     schema: {
-      title: "Configure Cloud Deployment Tier",
+      title: "Configure deployment tier",
       fields: [
         {
-          id: "deploymentRegion",
-          label: "Cloud Region",
+          id: "region",
+          label: "Cloud region",
           type: "select",
-          options: ["ap-south-1 (Mumbai)", "us-east-1 (N. Virginia)", "eu-central-1 (Frankfurt)", "ap-southeast-1 (Singapore)"],
-          defaultValue: "ap-south-1 (Mumbai)",
+          options: ["ap-south-1 · Mumbai", "us-east-1 · Virginia", "eu-central-1 · Frankfurt"],
+          defaultValue: "ap-south-1 · Mumbai",
         },
         {
-          id: "teamSeats",
-          label: "Developer Seats",
+          id: "seats",
+          label: "Developer seats",
           type: "range",
           min: 1,
           max: 50,
           defaultValue: 10,
         },
         {
-          id: "dedicatedSupport",
-          label: "Include 24/7 Priority SLA & Dedicated Support",
+          id: "prioritySla",
+          label: "24/7 priority SLA",
           type: "checkbox",
           defaultValue: true,
+        },
+        {
+          id: "monthly",
+          label: "Monthly estimate",
+          type: "output",
+          format: "currency",
+          compute: { base: 49, terms: { seats: 12, prioritySla: 199 } },
         },
       ],
     },
   },
   {
     id: "feature-flags",
-    name: "Feature Flag & Engine Settings",
-    description: "System configuration with boolean toggles and nested options.",
+    name: "Runtime flags",
+    description: "Nested engine settings with dependent toggles.",
     schema: {
-      title: "UI Engine Runtime Configuration",
+      title: "Engine runtime configuration",
       fields: [
         {
-          id: "engineMode",
-          label: "Schema Compiler Mode",
+          id: "mode",
+          label: "Compiler mode",
           type: "select",
-          options: ["Production (Optimized JIT)", "Development (Verbose Validation)", "Strict Schema Mode"],
-          defaultValue: "Production (Optimized JIT)",
+          options: ["Production", "Development", "Strict"],
+          defaultValue: "Production",
+        },
+        {
+          id: "verboseLogs",
+          label: "Verbose schema logs",
+          type: "checkbox",
+          defaultValue: false,
+          visibleWhen: { field: "mode", equals: "Development" },
         },
         {
           id: "cacheTTL",
-          label: "Schema Cache TTL (Minutes)",
+          label: "Schema cache TTL (min)",
           type: "range",
           min: 5,
           max: 120,
           defaultValue: 30,
         },
         {
-          id: "telemetryOptIn",
-          label: "Stream Anonymized Core Web Vitals to Telemetry",
+          id: "telemetry",
+          label: "Stream Web Vitals telemetry",
           type: "checkbox",
           defaultValue: true,
         },

@@ -1,0 +1,182 @@
+---
+/**
+ * Generative cover art per project — no screenshots needed, and every piece
+ * animates subtly on hover of its card (.pcard:hover) or row.
+ */
+interface Props {
+  id: string;
+}
+const { id } = Astro.props;
+const g = `g-${id}`;
+---
+
+<svg class={`art art--${id}`} viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+  <defs>
+    <linearGradient id={g} x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#8b6cff" />
+      <stop offset="0.5" stop-color="#4de1ff" />
+      <stop offset="1" stop-color="#c8ff4d" />
+    </linearGradient>
+    <radialGradient id={`${g}-glow`} cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#8b6cff" stop-opacity="0.45" />
+      <stop offset="1" stop-color="#8b6cff" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+  <rect width="400" height="300" fill="#0b0b10" />
+  <circle cx="200" cy="150" r="190" fill={`url(#${g}-glow)`} />
+
+  {
+    id === "config-driven-ui" && (
+      <g class="art__layer">
+        <text x="40" y="200" class="art__brace" fill="none" stroke={`url(#${g})`}>{"{"}</text>
+        <text x="300" y="200" class="art__brace" fill="none" stroke={`url(#${g})`}>{"}"}</text>
+        {[0, 1, 2, 3, 4].map((i) => (
+          <g class="art__field" style={`--i:${i}`}>
+            <rect x="120" y={62 + i * 38} width="160" height="26" rx="7" fill="none" stroke="rgba(242,240,234,0.18)" />
+            <rect x="130" y={72 + i * 38} width={40 + ((i * 37) % 70)} height="6" rx="3" fill={`url(#${g})`} />
+          </g>
+        ))}
+      </g>
+    )
+  }
+
+  {
+    id === "ipatc" && (
+      <g class="art__layer art__orbits">
+        {[40, 75, 110, 145].map((r, i) => (
+          <g class="art__orbit" style={`--i:${i}`}>
+            <circle cx="200" cy="150" r={r} fill="none" stroke="rgba(242,240,234,0.14)" stroke-dasharray={i % 2 ? "2 6" : "none"} />
+            <circle cx={200 + r} cy="150" r={5 - i * 0.6} fill={`url(#${g})`} />
+          </g>
+        ))}
+        <circle cx="200" cy="150" r="14" fill={`url(#${g})`} />
+      </g>
+    )
+  }
+
+  {
+    id === "sae-akgec" && (
+      <g class="art__layer" fill="none" stroke-linecap="round">
+        {[
+          "M20 80 H140 L170 110 H260 L290 80 H380",
+          "M20 150 H110 L140 180 H230 L250 160 H380",
+          "M20 220 H160 L190 190 H300 L330 220 H380",
+          "M200 20 V70 L230 100 V150",
+          "M120 280 V240 L150 210 V180",
+        ].map((d, i) => (
+          <path class="art__trace" d={d} stroke={i % 2 ? "rgba(242,240,234,0.2)" : `url(#${g})`} stroke-width="2" style={`--i:${i}`} />
+        ))}
+        {[
+          [140, 80], [260, 110], [110, 150], [250, 160], [190, 190], [330, 220], [230, 150], [150, 210],
+        ].map(([cx, cy]) => (
+          <circle cx={cx} cy={cy} r="5" fill="#0b0b10" stroke="#c8ff4d" stroke-width="2" />
+        ))}
+      </g>
+    )
+  }
+
+  {
+    id === "microfrontend-workbench" && (
+      <g class="art__layer">
+        {Array.from({ length: 24 }, (_, i) => {
+          const col = i % 6;
+          const row = Math.floor(i / 6);
+          const hot = [2, 7, 9, 14, 19, 22].includes(i);
+          return (
+            <rect
+              class={hot ? "art__tile is-hot" : "art__tile"}
+              style={`--i:${i}`}
+              x={52 + col * 50}
+              y={52 + row * 50}
+              width="42"
+              height="42"
+              rx="9"
+              fill={hot ? `url(#${g})` : "none"}
+              stroke="rgba(242,240,234,0.16)"
+            />
+          );
+        })}
+      </g>
+    )
+  }
+</svg>
+
+<style>
+  .art {
+    width: 100%;
+    height: 100%;
+  }
+
+  .art__layer {
+    transform-origin: 200px 150px;
+    transition: transform 1.4s var(--ease-out);
+  }
+
+  :global(.pcard:hover) .art__layer,
+  :global(.prow:hover) .art__layer {
+    transform: scale(1.06);
+  }
+
+  .art__brace {
+    font-family: var(--font-display);
+    font-size: 150px;
+    font-weight: 300;
+    stroke-width: 1.5;
+  }
+
+  .art__field {
+    transition: transform 0.9s var(--ease-out);
+    transition-delay: calc(var(--i) * 50ms);
+  }
+
+  :global(.pcard:hover) .art__field {
+    transform: translateX(calc((var(--i) - 2) * 6px));
+  }
+
+  .art__orbit {
+    transform-origin: 200px 150px;
+    animation: orbit calc(14s + var(--i) * 6s) linear infinite;
+  }
+
+  @keyframes orbit {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .art__trace {
+    stroke-dasharray: 420;
+    stroke-dashoffset: 0;
+    animation: trace 5s calc(var(--i) * 0.4s) var(--ease-in-out) infinite;
+  }
+
+  @keyframes trace {
+    0% {
+      stroke-dashoffset: 420;
+    }
+    50%,
+    100% {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  .art__tile {
+    transition: transform 0.8s var(--ease-out);
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+
+  .art__tile.is-hot {
+    animation: tile 3.2s calc(var(--i) * 0.15s) ease-in-out infinite alternate;
+  }
+
+  @keyframes tile {
+    to {
+      opacity: 0.35;
+    }
+  }
+
+  :global(.pcard:hover) .art__tile {
+    transform: scale(0.82) rotate(8deg);
+  }
+</style>

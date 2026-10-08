@@ -1,0 +1,938 @@
+---
+import { demoSchemas } from "../data/portfolioData";
+import { formatSchema, highlightJson } from "../scripts/json-highlight";
+
+const initial = formatSchema(demoSchemas[0].schema);
+---
+
+<section id="engine" class="engine" data-engine data-scene='{"x":0,"y":0,"scale":2.5,"intensity":0.24,"distort":0.12,"hue":0.32}'>
+  <div class="container engine__head">
+    <p class="eyebrow" data-reveal>(02) — Signature engineering</p>
+    <h2 class="display" data-split>Interfaces, <span class="serif">compiled</span> from JSON.</h2>
+    <p class="lead" data-reveal>
+      A scaled-down version of the config-driven engine I architect in production: a schema goes in, and a validated,
+      reactive UI comes out. Scroll to watch it compile, then switch schemas or edit the JSON yourself.
+    </p>
+  </div>
+
+  <div class="engine__stage" data-engine-stage>
+    <div class="container engine__frame">
+      <div class="engine__toolbar">
+        <div class="engine__tabs" role="tablist" aria-label="Example schemas">
+          <span class="engine__tab-pill" data-tab-pill aria-hidden="true"></span>
+          {
+            demoSchemas.map((s, i) => (
+              <button type="button" role="tab" class="engine__tab" aria-selected={i === 0 ? "true" : "false"} data-tab={i}>
+                {s.name}
+              </button>
+            ))
+          }
+        </div>
+        <p class="engine__desc mono" data-schema-desc>{demoSchemas[0].description}</p>
+      </div>
+
+      <div class="engine__panels">
+        <div class="panel panel--code">
+          <div class="panel__bar">
+            <span class="panel__dots" aria-hidden="true"><i></i><i></i><i></i></span>
+            <span>schema.json</span>
+            <span class="panel__status" data-parse-status>valid</span>
+          </div>
+          <div class="code" data-code>
+            <div class="code__inner">
+              <pre class="code__gutter" data-gutter aria-hidden="true">{initial.lines.map((_, i) => i + 1).join("\n")}</pre>
+              <div class="code__editor">
+                <span class="code__active" data-active-line aria-hidden="true"></span>
+                <pre class="code__hl" data-hl aria-hidden="true" set:html={initial.lines.map((l) => `<span class="ln">${highlightJson(l) || " "}</span>`).join("")} />
+                <textarea
+                  class="code__input"
+                  data-input
+                  spellcheck="false"
+                  autocapitalize="off"
+                  autocomplete="off"
+                  wrap="off"
+                  readonly
+                  aria-label="Schema JSON editor">{initial.text}</textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel panel--ui">
+          <div class="panel__bar">
+            <span>Rendered UI</span>
+            <span class="panel__meta" data-render-meta>waiting for schema…</span>
+          </div>
+          <div class="ui__body" data-lenis-prevent>
+            <span class="ui__scan" data-scan aria-hidden="true"></span>
+            <form class="engine-form" data-form novalidate onsubmit="return false"></form>
+          </div>
+        </div>
+
+        <div class="panel panel--state">
+          <div class="panel__bar">
+            <span>state</span>
+            <span class="panel__live"><i aria-hidden="true"></i>reactive</span>
+          </div>
+          <pre class="state" data-state aria-live="off"></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .engine {
+    position: relative;
+    padding-top: clamp(6rem, 14vw, 12rem);
+  }
+
+  .engine__head {
+    display: grid;
+    gap: 1.75rem;
+    margin-bottom: clamp(2rem, 5vw, 4rem);
+  }
+
+  .engine__head .display {
+    max-width: 14ch;
+  }
+
+  .engine__stage {
+    height: 100svh;
+    padding: 5.25rem 0 1.75rem;
+  }
+
+  .engine__frame {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    height: 100%;
+  }
+
+  .engine__toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem 1.5rem;
+  }
+
+  .engine__tabs {
+    position: relative;
+    display: inline-flex;
+    padding: 0.3rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: rgba(10, 10, 14, 0.7);
+  }
+
+  .engine__tab {
+    position: relative;
+    z-index: 1;
+    padding: 0.55rem 1.05rem;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    color: var(--fg-soft);
+    transition: color 0.4s;
+  }
+
+  .engine__tab[aria-selected="true"] {
+    color: var(--accent-ink);
+  }
+
+  .engine__tab-pill {
+    position: absolute;
+    top: 0.3rem;
+    left: 0;
+    height: calc(100% - 0.6rem);
+    border-radius: 999px;
+    background: var(--accent);
+  }
+
+  .engine__desc {
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+
+  .engine__panels {
+    flex: 1;
+    min-height: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 4fr) minmax(0, 3fr);
+    gap: 1rem;
+  }
+
+  .panel {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: rgba(11, 11, 16, 0.78);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+
+  .panel__bar {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--line);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+  }
+
+  .panel__dots {
+    display: inline-flex;
+    gap: 6px;
+  }
+
+  .panel__dots i {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--line-strong);
+  }
+
+  .panel__status,
+  .panel__meta,
+  .panel__live {
+    margin-left: auto;
+  }
+
+  .panel__status {
+    padding: 0.15rem 0.55rem;
+    border-radius: 999px;
+    background: rgba(200, 255, 77, 0.12);
+    color: var(--accent);
+    max-width: 60%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .panel__status.is-error {
+    background: rgba(255, 107, 74, 0.14);
+    color: var(--coral);
+  }
+
+  .panel__live {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .panel__live i {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    animation: blink 1.6s infinite;
+  }
+
+  @keyframes blink {
+    50% {
+      opacity: 0.25;
+    }
+  }
+
+  /* Code editor: a transparent textarea over a highlighted <pre>. */
+  .code {
+    --lh: 21px;
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .engine__stage.is-live .code {
+    overflow: auto;
+  }
+
+  .code__inner {
+    display: flex;
+    min-width: max-content;
+    min-height: 100%;
+    padding: 0.9rem 0;
+  }
+
+  .code__gutter,
+  .code__hl,
+  .code__input {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    line-height: var(--lh);
+    tab-size: 2;
+  }
+
+  .code__gutter {
+    position: sticky;
+    left: 0;
+    z-index: 2;
+    padding: 0 0.9rem 0 1rem;
+    text-align: right;
+    color: rgba(242, 240, 234, 0.22);
+    background: rgb(11, 11, 16);
+    user-select: none;
+  }
+
+  .code__editor {
+    position: relative;
+    flex: 1;
+    display: grid;
+    padding-right: 1.5rem;
+  }
+
+  .code__hl,
+  .code__input {
+    grid-area: 1 / 1;
+    padding: 0 0 0 0.25rem;
+    white-space: pre;
+    overflow: hidden;
+  }
+
+  .code__hl :global(.ln) {
+    display: block;
+    min-height: var(--lh);
+  }
+
+  .code__hl {
+    pointer-events: none;
+  }
+
+  /* Above the clip-pathed lines, which paint as their own layers. */
+  .code__input {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    resize: none;
+    outline: none;
+    background: transparent;
+    color: transparent;
+    caret-color: var(--accent);
+    pointer-events: none;
+  }
+
+  .engine__stage.is-live .code__input {
+    pointer-events: auto;
+  }
+
+  .code__input::selection {
+    background: rgba(200, 255, 77, 0.22);
+    color: transparent;
+  }
+
+  .code__active {
+    position: absolute;
+    top: 0;
+    left: -0.4rem;
+    right: 0;
+    height: var(--lh);
+    background: linear-gradient(90deg, rgba(200, 255, 77, 0.14), rgba(200, 255, 77, 0));
+    border-left: 2px solid var(--accent);
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  /* Token colours */
+  .engine :global(.tk-key) {
+    color: #a99bff;
+  }
+  .engine :global(.tk-str) {
+    color: #d8ff8a;
+  }
+  .engine :global(.tk-num) {
+    color: #ff9476;
+  }
+  .engine :global(.tk-lit) {
+    color: #6fe6ff;
+  }
+  .engine :global(.tk-punct) {
+    color: rgba(242, 240, 234, 0.4);
+  }
+
+  .ui__body {
+    position: relative;
+    flex: 1;
+    min-height: 0;
+    overflow: auto;
+    padding: 1.1rem;
+  }
+
+  .ui__scan {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    box-shadow: 0 0 18px 2px rgba(200, 255, 77, 0.55);
+    opacity: 0;
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  .state {
+    flex: 1;
+    min-height: 0;
+    overflow: auto;
+    margin: 0;
+    padding: 0.9rem 1rem;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    line-height: 20px;
+  }
+
+  .state :global(.ln) {
+    display: block;
+    border-radius: 4px;
+  }
+
+  .state :global(.is-flash) {
+    animation: flash 1.1s var(--ease-out);
+  }
+
+  @keyframes flash {
+    from {
+      background: rgba(200, 255, 77, 0.28);
+    }
+  }
+
+  @media (max-width: 1200px) {
+    .engine__panels {
+      grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+      grid-template-rows: minmax(0, 1.6fr) minmax(0, 1fr);
+    }
+
+    .panel--code {
+      grid-row: span 2;
+    }
+  }
+
+  @media (max-width: 899px) {
+    .engine__stage {
+      height: auto;
+      padding: 0 0 2rem;
+    }
+
+    .engine__panels {
+      grid-template-columns: 1fr;
+      grid-template-rows: none;
+    }
+
+    .panel--code {
+      grid-row: auto;
+      height: 380px;
+    }
+
+    .panel--state {
+      max-height: 260px;
+    }
+
+    .engine__tabs {
+      max-width: 100%;
+      overflow-x: auto;
+    }
+
+    .engine__tab {
+      white-space: nowrap;
+    }
+  }
+</style>
+
+<style is:global>
+  /* Runtime-rendered form (built by src/scripts/form-engine.ts) */
+  .engine-form {
+    transition: opacity 0.4s;
+  }
+
+  .engine-form.is-stale {
+    opacity: 0.35;
+  }
+
+  .engine-form .ef-title {
+    margin: 0 0 0.9rem;
+    font-size: 1.15rem;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    border-radius: 8px;
+  }
+
+  .engine-form .ef {
+    margin-bottom: 0.55rem;
+    padding: 0.8rem 0.95rem;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: rgba(242, 240, 234, 0.025);
+    overflow: hidden;
+  }
+
+  .engine-form .ef-label {
+    display: block;
+    margin-bottom: 0.4rem;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .engine-form .ef-input,
+  .engine-form .ef-select select {
+    width: 100%;
+    padding: 0.3rem 0;
+    border: 0;
+    border-bottom: 1px solid var(--line-strong);
+    border-radius: 0;
+    background: transparent;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.3s;
+  }
+
+  .engine-form .ef-input::placeholder {
+    color: rgba(242, 240, 234, 0.25);
+  }
+
+  .engine-form .ef-input:focus,
+  .engine-form .ef-select select:focus {
+    border-color: var(--accent);
+  }
+
+  .engine-form .is-invalid .ef-input {
+    border-color: var(--coral);
+  }
+
+  .engine-form .is-valid .ef-input {
+    border-color: rgba(200, 255, 77, 0.6);
+  }
+
+  .engine-form .ef-error {
+    display: block;
+    margin-top: 0.35rem;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    color: var(--coral);
+  }
+
+  .engine-form .ef-error:empty {
+    display: none;
+  }
+
+  .engine-form .ef-select {
+    position: relative;
+  }
+
+  .engine-form .ef-select::after {
+    content: "";
+    position: absolute;
+    right: 0.2rem;
+    top: 50%;
+    width: 7px;
+    height: 7px;
+    border-right: 1.5px solid var(--fg-soft);
+    border-bottom: 1.5px solid var(--fg-soft);
+    transform: translateY(-70%) rotate(45deg);
+    pointer-events: none;
+  }
+
+  .engine-form .ef-select select {
+    appearance: none;
+    padding-right: 1.5rem;
+  }
+
+  .engine-form .ef-select option {
+    background: var(--bg-raise);
+  }
+
+  .engine-form .ef-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  .engine-form .ef-value {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--accent);
+  }
+
+  .engine-form .ef-range {
+    width: 100%;
+    height: 4px;
+    margin: 0.6rem 0 0.25rem;
+    border-radius: 4px;
+    appearance: none;
+    background: linear-gradient(90deg, var(--accent) var(--fill, 50%), var(--line-strong) var(--fill, 50%));
+    outline: none;
+  }
+
+  .engine-form .ef-range::-webkit-slider-thumb {
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--fg);
+    box-shadow: 0 0 0 4px rgba(200, 255, 77, 0.25);
+  }
+
+  .engine-form .ef-range::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border: 0;
+    border-radius: 50%;
+    background: var(--fg);
+    box-shadow: 0 0 0 4px rgba(200, 255, 77, 0.25);
+  }
+
+  .engine-form .ef-range:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 6px;
+  }
+
+  .engine-form .ef-toggle {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.92rem;
+  }
+
+  .engine-form .ef-toggle input {
+    position: absolute;
+    opacity: 0;
+    width: 1px;
+    height: 1px;
+  }
+
+  .engine-form .ef-switch {
+    position: relative;
+    flex: none;
+    width: 38px;
+    height: 22px;
+    border-radius: 999px;
+    background: var(--line-strong);
+    transition: background-color 0.35s;
+  }
+
+  .engine-form .ef-switch::after {
+    content: "";
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--fg);
+    transition: transform 0.45s var(--ease-out);
+  }
+
+  .engine-form .ef-toggle input:checked + .ef-switch {
+    background: var(--accent);
+  }
+
+  .engine-form .ef-toggle input:checked + .ef-switch::after {
+    transform: translateX(16px);
+    background: var(--accent-ink);
+  }
+
+  .engine-form .ef-toggle input:focus-visible + .ef-switch {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+
+  .engine-form .ef-output {
+    display: block;
+    font-size: 2.1rem;
+    font-weight: 500;
+    letter-spacing: -0.04em;
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .engine-form .ef-output::after {
+    content: " /mo";
+    font-size: 0.9rem;
+    color: var(--muted);
+    letter-spacing: 0;
+  }
+</style>
+
+<script>
+  import { DESKTOP, gsap, ScrollTrigger, onReady, reducedMotion } from "../scripts/motion";
+  import { demoSchemas } from "../data/portfolioData";
+  import { formatSchema, highlightJson } from "../scripts/json-highlight";
+  import { mountForm, parseSchema, visibleState, type FormSchema, type MountedForm } from "../scripts/form-engine";
+
+  const root = document.querySelector<HTMLElement>("[data-engine]")!;
+  const stage = root.querySelector<HTMLElement>("[data-engine-stage]")!;
+  const code = root.querySelector<HTMLElement>("[data-code]")!;
+  const hl = root.querySelector<HTMLElement>("[data-hl]")!;
+  const gutter = root.querySelector<HTMLElement>("[data-gutter]")!;
+  const input = root.querySelector<HTMLTextAreaElement>("[data-input]")!;
+  const activeBar = root.querySelector<HTMLElement>("[data-active-line]")!;
+  const formEl = root.querySelector<HTMLFormElement>("[data-form]")!;
+  const statePre = root.querySelector<HTMLElement>("[data-state]")!;
+  const parseStatus = root.querySelector<HTMLElement>("[data-parse-status]")!;
+  const meta = root.querySelector<HTMLElement>("[data-render-meta]")!;
+  const scan = root.querySelector<HTMLElement>("[data-scan]")!;
+  const desc = root.querySelector<HTMLElement>("[data-schema-desc]")!;
+  const pill = root.querySelector<HTMLElement>("[data-tab-pill]")!;
+  const tabs = Array.from(root.querySelectorAll<HTMLButtonElement>("[data-tab]"));
+
+  const LH = 21;
+  const GLOW = "0 0 0 1px rgba(200,255,77,0.9), 0 0 36px 0 rgba(200,255,77,0.35)";
+  const NO_GLOW = "0 0 0 1px rgba(200,255,77,0), 0 0 36px 0 rgba(200,255,77,0)";
+
+  let schema: FormSchema;
+  let form: MountedForm;
+  let interacted = false;
+  let live = false;
+  let progressTween: gsap.core.Tween | null = null;
+  let running: gsap.core.Timeline | null = null;
+
+  /* Rendering ----------------------------------------------------------- */
+  function renderCode(text: string) {
+    const lines = text.split("\n");
+    hl.innerHTML = lines.map((l) => `<span class="ln">${highlightJson(l) || " "}</span>`).join("");
+    gutter.textContent = lines.map((_, i) => i + 1).join("\n");
+    return Array.from(hl.children) as HTMLElement[];
+  }
+
+  let lastStateKey = "";
+  function renderState(count = Infinity, changed?: string) {
+    const fields = schema.fields.slice(0, count);
+    const snapshot = visibleState({ ...schema, fields }, form.state);
+    const key = JSON.stringify(snapshot) + (changed ?? "");
+    if (key === lastStateKey) return;
+    lastStateKey = key;
+    statePre.innerHTML = JSON.stringify(snapshot, null, 2)
+      .split("\n")
+      .map((l) => {
+        const flash = changed && l.trimStart().startsWith(`"${changed}"`) ? " is-flash" : "";
+        return `<span class="ln${flash}">${highlightJson(l)}</span>`;
+      })
+      .join("");
+  }
+
+  function renderMeta() {
+    const visible = form.fields.slice(1).filter((el) => !el.hidden).length;
+    const errors = Object.values(form.errors);
+    const pending = errors.every((e) => e === "Required");
+    const status = errors.length ? `${errors.length} ${pending ? "required" : "invalid"}` : "valid";
+    meta.textContent = `${visible} fields · ${form.renderMs.toFixed(1)}ms · ${status}`;
+  }
+
+  function setStatus(error?: string) {
+    parseStatus.textContent = error ? `✕ ${error}` : "✓ valid";
+    parseStatus.classList.toggle("is-error", Boolean(error));
+    parseStatus.title = error ?? "";
+  }
+
+  function mount(next: FormSchema) {
+    schema = next;
+    form = mountForm(formEl, next, {
+      onChange(next, key) {
+        form = next;
+        // The initial sync (no key) and running assemblies render their own state.
+        if (key === undefined || running?.isActive()) return;
+        renderState(Infinity, key);
+        renderMeta();
+      },
+      onVisibility(el, visible) {
+        const collapsed = { height: 0, paddingTop: 0, paddingBottom: 0, marginBottom: 0, opacity: 0 };
+        if (visible) {
+          el.hidden = false;
+          gsap.set(el, { clearProps: "all" });
+          gsap.from(el, { ...collapsed, duration: 0.6, ease: "expo.out", clearProps: "all" });
+        } else {
+          gsap.to(el, {
+            ...collapsed,
+            duration: 0.45,
+            ease: "expo.inOut",
+            onComplete: () => {
+              el.hidden = true;
+              gsap.set(el, { clearProps: "all" });
+            },
+          });
+        }
+      },
+    });
+    formEl.classList.remove("is-stale");
+  }
+
+  function setLive(on: boolean) {
+    const next = on || interacted;
+    if (next === live) return;
+    live = next;
+    stage.classList.toggle("is-live", live);
+    input.readOnly = !live;
+    code.toggleAttribute("data-lenis-prevent", live);
+  }
+
+  function markInteracted() {
+    if (interacted) return;
+    interacted = true;
+    progressTween?.kill();
+    gsap.to([scan, activeBar], { opacity: 0, duration: 0.3 });
+    setLive(true);
+  }
+
+  /* Assembly: code lines type in, and each field materialises once its block is written. */
+  function buildAssembly(lines: HTMLElement[], ranges: [number, number][]) {
+    const tl = gsap.timeline({ paused: true });
+    const fieldEls = form.fields;
+    const lineStart: number[] = [];
+    const steps: { t: number; count: number }[] = [{ t: 0, count: 0 }];
+    let t = 0;
+
+    gsap.set(lines, { clipPath: "inset(0 100% 0 0)" });
+    gsap.set(fieldEls, { opacity: 0, y: 24, filter: "blur(8px)" });
+
+    const reveal = (i: number) => {
+      lineStart[i] = t;
+      tl.to(lines[i], { clipPath: "inset(0 0% 0 0)", duration: 0.16, ease: "power2.out" }, t);
+      t += 0.09;
+    };
+    const born = (el: HTMLElement, count: number) => {
+      tl.to(scan, { y: () => el.offsetTop, opacity: 1, duration: 0.2, ease: "power2.out" }, t - 0.2)
+        .to(el, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.5, ease: "expo.out" }, t)
+        .fromTo(el, { boxShadow: GLOW }, { boxShadow: NO_GLOW, duration: 1, ease: "power2.out" }, t + 0.1);
+      steps.push({ t, count });
+      t += 0.22;
+    };
+
+    const first = ranges[0]?.[0] ?? lines.length;
+    for (let i = 0; i < first; i++) reveal(i);
+    born(fieldEls[0], 0);
+    ranges.forEach(([start, end], fi) => {
+      for (let i = start; i <= end; i++) reveal(i);
+      const el = fieldEls[fi + 1];
+      if (el && !el.hidden) born(el, fi + 1);
+      else steps.push({ t, count: fi + 1 });
+    });
+    const last = ranges.at(-1)?.[1] ?? first - 1;
+    for (let i = last + 1; i < lines.length; i++) reveal(i);
+    const contentEnd = t;
+    tl.to(scan, { opacity: 0, duration: 0.3 }, t).to({}, { duration: 0.6 });
+
+    const total = schema.fields.length;
+    tl.eventCallback("onUpdate", () => {
+      const time = tl.time();
+      let active = 0;
+      for (let i = 0; i < lineStart.length; i++) if (lineStart[i] <= time) active = i;
+      let count = 0;
+      for (const s of steps) if (s.t <= time) count = s.count;
+
+      const done = time >= contentEnd;
+      gsap.set(activeBar, { y: active * LH, opacity: time > 0 && !done ? 1 : 0 });
+      code.scrollTop = Math.max(0, Math.min(active * LH - code.clientHeight * 0.55, code.scrollHeight - code.clientHeight));
+      renderState(count);
+      meta.textContent = done ? "" : `compiling… ${count}/${total}`;
+      if (done) renderMeta();
+      setLive(done);
+    });
+    return tl;
+  }
+
+  function loadSchema(index: number, animate: boolean) {
+    const def = demoSchemas[index];
+    const formatted = formatSchema(def.schema as FormSchema & { [key: string]: unknown });
+    input.value = formatted.text;
+    desc.textContent = def.description;
+    setStatus();
+    const lines = renderCode(formatted.text);
+    mount(def.schema as FormSchema);
+    code.scrollTop = 0;
+    lastStateKey = "";
+
+    running?.kill();
+    const tl = buildAssembly(lines, formatted.ranges);
+    running = tl;
+    if (animate) tl.timeScale(tl.duration() / 2.4).play();
+    else {
+      tl.progress(0);
+      renderState(0);
+      meta.textContent = `compiling… 0/${def.schema.fields.length}`;
+    }
+    return tl;
+  }
+
+  function movePill(index: number, instant = false) {
+    const tab = tabs[index];
+    gsap.to(pill, { x: tab.offsetLeft, width: tab.offsetWidth, duration: instant ? 0 : 0.7, ease: "expo.out" });
+  }
+
+  /* Events ----------------------------------------------------------------- */
+  tabs.forEach((tab, i) =>
+    tab.addEventListener("click", () => {
+      if (tab.getAttribute("aria-selected") === "true" && interacted) return;
+      tabs.forEach((t) => t.setAttribute("aria-selected", String(t === tab)));
+      movePill(i);
+      markInteracted();
+      loadSchema(i, !reducedMotion);
+    }),
+  );
+
+  let pending = 0;
+  input.addEventListener("input", () => {
+    markInteracted();
+    cancelAnimationFrame(pending);
+    pending = requestAnimationFrame(() => {
+      renderCode(input.value);
+      const result = parseSchema(input.value);
+      if (!result.schema) {
+        setStatus(result.error);
+        formEl.classList.add("is-stale");
+        return;
+      }
+      setStatus();
+      running?.kill();
+      running = null;
+      mount(result.schema);
+      lastStateKey = "";
+      renderState();
+      renderMeta();
+    });
+  });
+
+  window.addEventListener("resize", () => movePill(tabs.findIndex((t) => t.getAttribute("aria-selected") === "true"), true));
+
+  /* Choreography ----------------------------------------------------------- */
+  onReady(() => {
+    movePill(0, true);
+    const tl = loadSchema(0, false);
+
+    if (reducedMotion) {
+      tl.progress(1);
+      return;
+    }
+
+    if (window.matchMedia(DESKTOP).matches) {
+      ScrollTrigger.create({
+        trigger: stage,
+        start: "top top",
+        end: () => `+=${Math.max(1800, tl.duration() * 420)}`,
+        pin: true,
+        invalidateOnRefresh: true,
+        onUpdate(self) {
+          if (interacted) return;
+          progressTween = gsap.to(tl, { progress: self.progress, duration: 0.5, ease: "power2.out", overwrite: true });
+        },
+      });
+    } else {
+      ScrollTrigger.create({
+        trigger: stage,
+        start: "top 70%",
+        once: true,
+        onEnter: () => !interacted && tl.timeScale(tl.duration() / 3.2).play(),
+      });
+    }
+  });
+</script>

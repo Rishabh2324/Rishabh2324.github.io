@@ -1,0 +1,388 @@
+---
+import ProjectArt from "./ProjectArt.astro";
+import { projectsData } from "../data/portfolioData";
+---
+
+<section id="work" class="work" data-scene='{"x":0.6,"y":0.55,"scale":0.42,"intensity":0.9,"hue":0.45,"distort":0.38}'>
+  <div class="work__pin" data-work-pin>
+    <div class="container work__head">
+      <div>
+        <p class="eyebrow" data-reveal>(03) — Selected work</p>
+        <h2 class="display work__title" data-split>Systems & <span class="serif">case studies</span></h2>
+      </div>
+      <div class="work__progress mono" aria-hidden="true">
+        <span data-work-count>01 / {String(projectsData.length).padStart(2, "0")}</span>
+        <span class="work__bar"><i data-work-bar></i></span>
+      </div>
+    </div>
+
+    <div class="work__viewport">
+      <ul class="work__track" data-work-track>
+        {
+          projectsData.map((p, i) => (
+            <li class="pcard" data-pcard>
+              <a href={`/projects#${p.id}`} class="pcard__link" data-cursor="View" data-tilt>
+                <div class="pcard__art" data-pcard-art>
+                  <ProjectArt id={p.id} />
+                </div>
+                <div class="pcard__body">
+                  <div class="pcard__top mono">
+                    <span class="pcard__index">{String(i + 1).padStart(2, "0")}</span>
+                    <span>{p.category}</span>
+                    <span>{p.year}</span>
+                  </div>
+                  <h3 class="pcard__title">{p.title}</h3>
+                  <p class="pcard__sub">{p.impact[0]}</p>
+                  <ul class="pcard__chips">
+                    {p.techStack.slice(0, 4).map((t) => (
+                      <li class="chip">{t}</li>
+                    ))}
+                  </ul>
+                </div>
+              </a>
+            </li>
+          ))
+        }
+        <li class="pcard pcard--more" data-pcard>
+          <a href="/projects" class="pcard__more" data-cursor="Open">
+            <span class="mono">Archive</span>
+            <span class="pcard__more-title">All projects <span class="serif">& deep dives</span></span>
+            <span class="pcard__more-arrow" aria-hidden="true">→</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .work {
+    position: relative;
+    padding-top: clamp(6rem, 12vw, 10rem);
+  }
+
+  .work__pin {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(2rem, 4vw, 3rem);
+  }
+
+  .work__head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 2rem;
+  }
+
+  .work__title {
+    margin-top: 1.5rem;
+  }
+
+  .work__progress {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 0.75rem;
+    color: var(--fg-soft);
+    padding-bottom: 0.75rem;
+  }
+
+  .work__bar {
+    position: relative;
+    width: 8rem;
+    height: 1px;
+    background: var(--line-strong);
+  }
+
+  .work__bar i {
+    position: absolute;
+    inset: 0;
+    background: var(--accent);
+    transform-origin: left;
+    transform: scaleX(0.2);
+  }
+
+  .work__viewport {
+    overflow: hidden;
+  }
+
+  .work__track {
+    display: flex;
+    gap: clamp(1rem, 2vw, 1.75rem);
+    width: max-content;
+    padding-inline: var(--gutter);
+    padding-bottom: 2rem;
+  }
+
+  .pcard {
+    width: clamp(320px, 34vw, 540px);
+    perspective: 1200px;
+  }
+
+  .pcard__link {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    border: 1px solid var(--line);
+    border-radius: 22px;
+    background: var(--bg-card);
+    overflow: hidden;
+    transform-style: preserve-3d;
+    transition: border-color 0.5s;
+  }
+
+  .pcard__link:hover {
+    border-color: var(--line-strong);
+  }
+
+  .pcard__art {
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .pcard__body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+    padding: 1.5rem 1.5rem 1.75rem;
+    flex: 1;
+  }
+
+  .pcard__top {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    font-size: 0.68rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .pcard__index {
+    color: var(--accent);
+  }
+
+  .pcard__title {
+    font-size: clamp(1.5rem, 2.2vw, 2.15rem);
+    font-weight: 500;
+    line-height: 1.05;
+    letter-spacing: -0.035em;
+  }
+
+  .pcard__sub {
+    color: var(--fg-soft);
+    font-size: 0.95rem;
+  }
+
+  .pcard__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: auto;
+  }
+
+  .pcard--more {
+    width: clamp(280px, 26vw, 400px);
+  }
+
+  .pcard__more {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    min-height: 420px;
+    padding: 1.75rem;
+    border: 1px dashed var(--line-strong);
+    border-radius: 22px;
+    color: var(--fg-soft);
+    transition: background-color 0.6s var(--ease-out), color 0.6s;
+  }
+
+  .pcard__more .mono {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .pcard__more-title {
+    font-size: clamp(2rem, 3vw, 3rem);
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: -0.04em;
+    color: var(--fg);
+  }
+
+  .pcard__more-arrow {
+    font-size: 3rem;
+    transition: transform 0.6s var(--ease-out);
+  }
+
+  .pcard__more:hover {
+    background: var(--accent);
+    color: var(--accent-ink);
+  }
+
+  .pcard__more:hover .pcard__more-title {
+    color: var(--accent-ink);
+  }
+
+  .pcard__more:hover .pcard__more-arrow {
+    transform: translateX(12px);
+  }
+
+  .work__title {
+    font-size: clamp(2.5rem, 5.5vw, 5.75rem);
+  }
+
+  /* Desktop: the pinned reel fills exactly one viewport. */
+  @media (min-width: 900px) {
+    .work {
+      padding-top: clamp(2rem, 6vw, 5rem);
+    }
+
+    .work__pin {
+      height: 100svh;
+      padding: 6rem 0 2.5rem;
+    }
+
+    .work__viewport {
+      flex: 1;
+      min-height: 0;
+    }
+
+    .work__track {
+      height: 100%;
+      padding-bottom: 0;
+    }
+
+    .pcard {
+      height: 100%;
+    }
+
+    .pcard__art {
+      aspect-ratio: auto;
+      flex: 1;
+      min-height: 0;
+    }
+
+    .pcard__more {
+      min-height: 0;
+    }
+  }
+
+  @media (max-width: 899px) {
+    .work__head {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .work__progress {
+      display: none;
+    }
+
+    .work__viewport {
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+    }
+
+    .work__viewport::-webkit-scrollbar {
+      display: none;
+    }
+
+    .pcard {
+      width: min(82vw, 400px);
+      scroll-snap-align: center;
+    }
+
+    .pcard__more {
+      min-height: 100%;
+    }
+  }
+</style>
+
+<script>
+  import { DESKTOP, finePointer, gsap, onReady, reducedMotion } from "../scripts/motion";
+
+  const pin = document.querySelector<HTMLElement>("[data-work-pin]")!;
+  const track = pin.querySelector<HTMLElement>("[data-work-track]")!;
+  const cards = Array.from(track.querySelectorAll<HTMLElement>("[data-pcard]"));
+  const count = pin.querySelector<HTMLElement>("[data-work-count]")!;
+  const bar = pin.querySelector<HTMLElement>("[data-work-bar]")!;
+  const total = cards.length - 1;
+
+  // 3D tilt toward the pointer.
+  if (finePointer && !reducedMotion) {
+    track.querySelectorAll<HTMLElement>("[data-tilt]").forEach((card) => {
+      const rx = gsap.quickTo(card, "rotationX", { duration: 0.8, ease: "power3" });
+      const ry = gsap.quickTo(card, "rotationY", { duration: 0.8, ease: "power3" });
+      card.addEventListener("pointermove", (e) => {
+        const r = card.getBoundingClientRect();
+        ry(((e.clientX - r.left) / r.width - 0.5) * 10);
+        rx(-((e.clientY - r.top) / r.height - 0.5) * 10);
+      });
+      card.addEventListener("pointerleave", () => {
+        rx(0);
+        ry(0);
+      });
+    });
+  }
+
+  onReady(() => {
+    if (reducedMotion) return;
+    const mm = gsap.matchMedia();
+
+    mm.add(DESKTOP, () => {
+      const distance = () => track.scrollWidth - window.innerWidth;
+      const scroll = gsap.to(track, {
+        x: () => -distance(),
+        ease: "none",
+        scrollTrigger: {
+          trigger: pin,
+          start: "top top",
+          end: () => `+=${distance()}`,
+          pin: true,
+          scrub: 0.8,
+          invalidateOnRefresh: true,
+          onUpdate(self) {
+            const index = Math.min(total, Math.floor(self.progress * total) + 1);
+            count.textContent = `${String(index).padStart(2, "0")} / ${String(total).padStart(2, "0")}`;
+            gsap.set(bar, { scaleX: 0.2 + self.progress * 0.8 });
+          },
+        },
+      });
+
+      // Each card's artwork drifts against the scroll direction.
+      cards.forEach((card) => {
+        const art = card.querySelector("[data-pcard-art] svg");
+        if (!art) return;
+        gsap.fromTo(
+          art,
+          { xPercent: -12, scale: 1.25 },
+          {
+            xPercent: 12,
+            scale: 1.25,
+            ease: "none",
+            scrollTrigger: {
+              trigger: card,
+              containerAnimation: scroll,
+              start: "left right",
+              end: "right left",
+              scrub: true,
+            },
+          },
+        );
+      });
+    });
+
+    gsap.from(cards, {
+      opacity: 0,
+      y: 80,
+      rotate: 2,
+      stagger: 0.08,
+      duration: 1.4,
+      scrollTrigger: { trigger: track, start: "top 85%", once: true },
+    });
+  });
+</script>

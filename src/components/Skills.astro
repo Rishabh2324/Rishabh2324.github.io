@@ -1,0 +1,221 @@
+---
+import { skillsData } from "../data/portfolioData";
+
+const all = skillsData.flatMap((c) => c.skills);
+const rowA = all.filter((_, i) => i % 2 === 0).map((s) => s.name);
+const rowB = all.filter((_, i) => i % 2 === 1).map((s) => s.name);
+---
+
+<section id="skills" class="section skills" data-scene='{"x":0,"y":0,"scale":1.55,"intensity":0.4,"hue":0.8,"distort":0.2}'>
+  <div class="container">
+    <p class="eyebrow" data-reveal>(05) — Toolkit</p>
+    <h2 class="display skills__title" data-split>Engineering <span class="serif">toolkit</span></h2>
+  </div>
+
+  <div class="marquee" aria-hidden="true" data-marquee>
+    {
+      [rowA, rowB].map((row, r) => (
+        <div class="marquee__row" data-marquee-row data-direction={r === 0 ? "1" : "-1"}>
+          {[0, 1].map(() => (
+            <div class="marquee__group">
+              {row.map((name) => (
+                <span class:list={["marquee__item", { "is-outline": r === 1 }]}>
+                  {name}
+                  <svg viewBox="0 0 24 24" class="marquee__star">
+                    <path d="M12 0v24M0 12h24M3.5 3.5l17 17M20.5 3.5l-17 17" stroke="currentColor" stroke-width="2" />
+                  </svg>
+                </span>
+              ))}
+            </div>
+          ))}
+        </div>
+      ))
+    }
+  </div>
+
+  <div class="container">
+    <ul class="skills__grid" data-reveal="stagger">
+      {
+        skillsData.map((cat, i) => (
+          <li class="skill-cat">
+            <p class="skill-cat__index mono">0{i + 1}</p>
+            <h3 class="skill-cat__title">{cat.title}</h3>
+            <p class="skill-cat__desc">{cat.description}</p>
+            <ul class="skill-cat__list">
+              {cat.skills.map((s) => (
+                <li class:list={["skill", { "is-highlight": s.highlight }]}>
+                  <span>{s.name}</span>
+                  <span class="skill__level mono">{s.level}</span>
+                </li>
+              ))}
+            </ul>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .skills__title {
+    margin-top: 1.5rem;
+  }
+
+  .marquee {
+    display: grid;
+    gap: 0.5rem;
+    margin-block: clamp(3rem, 7vw, 6rem);
+    overflow: hidden;
+    transform: rotate(-2deg) scale(1.04);
+  }
+
+  .marquee__row {
+    display: flex;
+    width: max-content;
+    will-change: transform;
+  }
+
+  .marquee__group {
+    display: flex;
+    flex: none;
+  }
+
+  .marquee__item {
+    display: inline-flex;
+    align-items: center;
+    gap: clamp(1rem, 2.5vw, 2.5rem);
+    padding-right: clamp(1rem, 2.5vw, 2.5rem);
+    font-size: clamp(2.5rem, 7vw, 6.5rem);
+    font-weight: 600;
+    letter-spacing: -0.045em;
+    line-height: 1.1;
+    white-space: nowrap;
+  }
+
+  .marquee__item.is-outline {
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(242, 240, 234, 0.45);
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+  }
+
+  .marquee__star {
+    width: 0.4em;
+    height: 0.4em;
+    color: var(--accent);
+  }
+
+  .skills__grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .skill-cat {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1.6rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--bg-card);
+    transition: border-color 0.5s, transform 0.8s var(--ease-out);
+  }
+
+  .skill-cat:hover {
+    border-color: var(--line-strong);
+    transform: translateY(-6px);
+  }
+
+  .skill-cat__index {
+    font-size: 0.72rem;
+    color: var(--accent);
+  }
+
+  .skill-cat__title {
+    font-size: 1.3rem;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+  }
+
+  .skill-cat__desc {
+    font-size: 0.9rem;
+    color: var(--muted);
+  }
+
+  .skill-cat__list {
+    margin-top: 0.75rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .skill {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.7rem 0;
+    border-bottom: 1px solid var(--line);
+    font-size: 0.92rem;
+    color: var(--fg-soft);
+    transition: color 0.3s, padding 0.5s var(--ease-out);
+  }
+
+  .skill:hover {
+    color: var(--fg);
+    padding-left: 0.4rem;
+  }
+
+  .skill.is-highlight > span:first-child::before {
+    content: "✦ ";
+    color: var(--accent);
+  }
+
+  .skill__level {
+    flex: none;
+    font-size: 0.68rem;
+    color: var(--muted);
+    align-self: center;
+  }
+
+  @media (max-width: 1100px) {
+    .skills__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 640px) {
+    .skills__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<script>
+  import { gsap, onReady, reducedMotion, scrollVelocity } from "../scripts/motion";
+
+  onReady(() => {
+    if (reducedMotion) return;
+    const rows = Array.from(document.querySelectorAll<HTMLElement>("[data-marquee-row]"));
+
+    const loops = rows.map((row) => {
+      const dir = Number(row.dataset.direction);
+      return gsap.fromTo(
+        row,
+        { xPercent: dir === 1 ? 0 : -50 },
+        { xPercent: dir === 1 ? -50 : 0, duration: 38, ease: "none", repeat: -1 },
+      );
+    });
+
+    // Scrolling speeds the marquee up and flips it with the scroll direction.
+    let direction = 1;
+    gsap.ticker.add(() => {
+      const v = scrollVelocity();
+      if (Math.abs(v) > 0.5) direction = Math.sign(v);
+      const speed = direction * (1 + Math.min(Math.abs(v) * 0.25, 6));
+      loops.forEach((loop) => (loop.timeScale(gsap.utils.interpolate(loop.timeScale(), speed, 0.08))));
+      rows.forEach((row) => gsap.set(row, { skewX: gsap.utils.clamp(-8, 8, -v * 0.35) }));
+    });
+  });
+</script>

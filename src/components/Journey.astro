@@ -1,0 +1,356 @@
+---
+import { experienceData } from "../data/portfolioData";
+
+interface Props {
+  /** Full detail for the /experience page; the home page shows highlights. */
+  full?: boolean;
+  index?: string;
+}
+const { full = false, index = "(04)" } = Astro.props;
+const pad = (n: number) => String(n).padStart(2, "0");
+---
+
+<section id="journey" class="section journey" data-journey data-scene='{"x":-0.58,"y":-0.15,"scale":0.78,"hue":0.62,"intensity":0.85,"distort":0.28}'>
+  <div class="container">
+    <div class="journey__head">
+      <p class="eyebrow" data-reveal>{index} — Journey</p>
+      <h2 class="display" data-split>The journey <span class="serif">so far</span></h2>
+    </div>
+
+    <div class="journey__grid">
+      <aside class="journey__aside" aria-hidden="true">
+        <div class="journey__sticky">
+          <p class="journey__counter mono"><span data-journey-index>01</span> / {pad(experienceData.length)}</p>
+          <div class="journey__roller">
+            <p class="journey__period" data-journey-period>{experienceData[0].period}</p>
+          </div>
+          <p class="journey__company serif" data-journey-company>{experienceData[0].company}</p>
+        </div>
+      </aside>
+
+      <div class="journey__list">
+        <span class="journey__rail" aria-hidden="true"><i data-journey-fill></i></span>
+        <ol class="journey__jobs">
+        {
+          experienceData.map((job, i) => (
+            <li class:list={["job", { "is-current": job.current }]} data-job data-period={job.period} data-company={job.company}>
+              <span class="job__node" aria-hidden="true" />
+              <div class="job__meta mono">
+                <span>{job.period}</span>
+                <span>{job.type}</span>
+                {job.current && <span class="job__now">Now</span>}
+              </div>
+              <h3 class="job__role">{job.role}</h3>
+              <p class="job__company">
+                {job.companyUrl ? (
+                  <a href={job.companyUrl} target="_blank" rel="noopener">
+                    {job.company} ↗
+                  </a>
+                ) : (
+                  job.company
+                )}
+                <span> · {job.location}</span>
+              </p>
+              <p class="job__summary">{job.summary}</p>
+              <ul class="job__wins">
+                {(full ? job.achievements : job.achievements.slice(0, 3)).map((a) => (
+                  <li>{a}</li>
+                ))}
+              </ul>
+              {full && (
+                <div class="job__arch">
+                  <p class="mono">Key architecture</p>
+                  <ul>
+                    {job.keyArchitecture.map((k) => (
+                      <li class="chip">{k}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              <ul class="job__stack">
+                {job.techStack.map((t) => (
+                  <li class="chip">{t}</li>
+                ))}
+              </ul>
+            </li>
+          ))
+        }
+        </ol>
+      </div>
+    </div>
+
+    {
+      !full && (
+        <div class="journey__more" data-reveal>
+          <a href="/experience" class="btn" data-magnetic="0.25">
+            <span data-magnetic-inner>Full career roadmap</span>
+            <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 12 12 4M5 4h7v7" stroke="currentColor" stroke-width="1.5" /></svg>
+          </a>
+        </div>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .journey__head {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  .journey__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: clamp(2rem, 6vw, 6rem);
+    margin-top: clamp(3rem, 7vw, 6rem);
+  }
+
+  .journey__sticky {
+    position: sticky;
+    top: 30vh;
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  .journey__counter {
+    font-size: 0.78rem;
+    color: var(--muted);
+  }
+
+  .journey__counter span {
+    color: var(--accent);
+  }
+
+  .journey__roller {
+    overflow: hidden;
+  }
+
+  .journey__period {
+    font-size: clamp(2.5rem, 5.5vw, 5.5rem);
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: -0.05em;
+  }
+
+  .journey__company {
+    font-size: clamp(1.4rem, 2.4vw, 2.2rem);
+    color: var(--fg-soft);
+  }
+
+  .journey__list {
+    position: relative;
+    padding-left: clamp(2rem, 4vw, 3.5rem);
+  }
+
+  .journey__jobs {
+    display: grid;
+    gap: clamp(4rem, 8vw, 7rem);
+  }
+
+  .journey__rail {
+    position: absolute;
+    top: 0.4rem;
+    bottom: 0;
+    left: 0;
+    width: 1px;
+    background: var(--line);
+  }
+
+  .journey__rail i {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(var(--accent), var(--violet));
+    transform-origin: top;
+    transform: scaleY(0);
+  }
+
+  .job {
+    position: relative;
+    display: grid;
+    gap: 1rem;
+  }
+
+  .job__node {
+    position: absolute;
+    top: 0.3rem;
+    left: calc(-1 * clamp(2rem, 4vw, 3.5rem) - 6px);
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    border: 1px solid var(--line-strong);
+    background: var(--bg);
+    transition: background-color 0.5s, border-color 0.5s, box-shadow 0.5s;
+  }
+
+  .job.is-active .job__node {
+    background: var(--accent);
+    border-color: var(--accent);
+    box-shadow: 0 0 0 6px rgba(200, 255, 77, 0.15), 0 0 24px rgba(200, 255, 77, 0.6);
+  }
+
+  .job__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.25rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .job__now {
+    color: var(--accent);
+  }
+
+  .job__role {
+    font-size: clamp(1.75rem, 3vw, 2.75rem);
+    font-weight: 500;
+    line-height: 1.05;
+    letter-spacing: -0.035em;
+  }
+
+  .job__company {
+    color: var(--fg-soft);
+  }
+
+  .job__company a {
+    color: var(--fg);
+    border-bottom: 1px solid var(--line-strong);
+    transition: color 0.3s, border-color 0.3s;
+  }
+
+  .job__company a:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+
+  .job__summary {
+    font-size: 1.1rem;
+    color: var(--fg-soft);
+    max-width: 40rem;
+  }
+
+  .job__wins {
+    display: grid;
+    gap: 0.75rem;
+    max-width: 42rem;
+  }
+
+  .job__wins li {
+    position: relative;
+    padding-left: 1.5rem;
+    color: var(--fg-soft);
+    font-size: 0.97rem;
+  }
+
+  .job__wins li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.7em;
+    width: 0.65rem;
+    height: 1px;
+    background: var(--accent);
+  }
+
+  .job__arch {
+    display: grid;
+    gap: 0.6rem;
+  }
+
+  .job__arch .mono {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+  }
+
+  .job__arch ul,
+  .job__stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .journey__more {
+    margin-top: clamp(4rem, 8vw, 6rem);
+    padding-left: calc(5 / 12 * 100%);
+  }
+
+  @media (max-width: 900px) {
+    .journey__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .journey__aside {
+      display: none;
+    }
+
+    .journey__more {
+      padding-left: 0;
+    }
+  }
+</style>
+
+<script>
+  import { gsap, ScrollTrigger, onReady, reducedMotion } from "../scripts/motion";
+
+  onReady(() => {
+    const root = document.querySelector<HTMLElement>("[data-journey]");
+    if (!root) return;
+    const jobs = Array.from(root.querySelectorAll<HTMLElement>("[data-job]"));
+    const fill = root.querySelector<HTMLElement>("[data-journey-fill]")!;
+    const period = root.querySelector<HTMLElement>("[data-journey-period]")!;
+    const company = root.querySelector<HTMLElement>("[data-journey-company]")!;
+    const indexEl = root.querySelector<HTMLElement>("[data-journey-index]")!;
+    const list = root.querySelector<HTMLElement>(".journey__list")!;
+
+    if (reducedMotion) {
+      gsap.set(fill, { scaleY: 1 });
+      jobs.forEach((j) => j.classList.add("is-active"));
+      return;
+    }
+
+    gsap.to(fill, {
+      scaleY: 1,
+      ease: "none",
+      scrollTrigger: { trigger: list, start: "top 55%", end: "bottom 55%", scrub: true },
+    });
+
+    let current = 0;
+    const show = (i: number) => {
+      if (i === current) return;
+      const dir = i > current ? 1 : -1;
+      current = i;
+      indexEl.textContent = String(i + 1).padStart(2, "0");
+      gsap.timeline()
+        .to([period, company], { yPercent: -100 * dir, opacity: 0, duration: 0.35, ease: "power3.in" })
+        .add(() => {
+          period.textContent = jobs[i].dataset.period ?? "";
+          company.textContent = jobs[i].dataset.company ?? "";
+        })
+        .fromTo([period, company], { yPercent: 100 * dir, opacity: 0 }, { yPercent: 0, opacity: 1, duration: 0.8, ease: "expo.out", stagger: 0.05 });
+    };
+
+    jobs.forEach((job, i) => {
+      ScrollTrigger.create({
+        trigger: job,
+        start: "top 55%",
+        end: "bottom 55%",
+        onToggle: (self) => {
+          if (self.isActive) show(i);
+        },
+        onEnter: () => job.classList.add("is-active"),
+        onLeaveBack: () => job.classList.remove("is-active"),
+      });
+
+      gsap.from(job.children, {
+        opacity: 0,
+        y: 40,
+        stagger: 0.06,
+        duration: 1.1,
+        scrollTrigger: { trigger: job, start: "top 85%", once: true },
+      });
+    });
+  });
+</script>

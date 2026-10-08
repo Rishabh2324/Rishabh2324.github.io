@@ -1,38 +1,42 @@
 # Rishabh Jain — Senior Frontend Engineer Portfolio
 
-[![Live Site](https://img.shields.io/badge/Live_Portfolio-rishabh2324.github.io-6366f1?style=for-the-badge&logoColor=white)](https://rishabh2324.github.io/)
-[![Built with Astro](https://img.shields.io/badge/Astro-2.9.6-ff5d01?style=for-the-badge&logo=astro&logoColor=white)](https://astro.build)
+[![Live Site](https://img.shields.io/badge/Live_Portfolio-rishabh2324.github.io-c8ff4d?style=for-the-badge&logoColor=black)](https://rishabh2324.github.io/)
+[![Built with Astro](https://img.shields.io/badge/Astro-7-ff5d01?style=for-the-badge&logo=astro&logoColor=white)](https://astro.build)
 [![Deployment](https://img.shields.io/badge/Deployed_on-GitHub_Pages-22272e?style=for-the-badge&logo=github&logoColor=white)](https://rishabh2324.github.io/)
 
-A modern, high-performance portfolio website built with **Astro**, **Vanilla Modern CSS**, and zero-runtime overhead. Features a bespoke obsidian dark/light design system, sub-second page transitions, zero-FOUC theme hydration, and an interactive live **Config-Driven UI Simulator**.
+A cinematic, motion-driven portfolio: a live WebGL orb that morphs as you scroll, GSAP scroll choreography, and a working **config-driven UI engine** that compiles a JSON schema into a reactive form right on the page.
 
 🌐 **Live URL**: [https://rishabh2324.github.io/](https://rishabh2324.github.io/)
 
 ---
 
-## ⚡ Highlights & Features
+## ⚡ Highlights
 
-- 🎨 **Bespoke Design System:** Obsidian dark theme (`#08090d`) with electric cyan & indigo ambient mesh glows and a crisp porcelain light mode.
-- ⚡ **Interactive Schema Demo:** Live interactive Config-Driven UI rendering engine simulator with real-time JSON validation and reactive state synchronization.
-- 🏎️ **Ultra-Fast Performance:** Static generation under 500ms with 99+ Core Web Vitals and zero external UI bloat.
-- 📱 **Fully Responsive & Accessible:** Fluid layouts for mobile, tablet, and ultra-wide screens with full keyboard navigation and WCAG 2.1 compliance.
-- 🌙 **Zero-FOUC Theme Switching:** Smooth client-side theme switcher persisted via `localStorage`.
+- 🌌 **WebGL orb:** a noise-displaced, iridescent shader orb (Three.js) that reacts to the cursor and scroll velocity, and travels, scales and recolours between sections (`src/scripts/webgl`).
+- 🧩 **Live config engine:** scroll to watch the schema type itself out while each field materialises. Then switch schemas or edit the JSON directly, with validation, conditional branching (`visibleWhen`) and computed outputs (`src/scripts/form-engine.ts`).
+- 🎬 **Scroll storytelling:** a preloader intro, split-text reveals, a pinned horizontal projects reel, a timeline that draws itself as you scroll, and velocity-reactive marquees.
+- 🖱️ **Micro-interactions:** a custom cursor with contextual labels, magnetic buttons, 3D card tilt, a hover-follow project preview and curtain page transitions.
+- ♿ **Graceful by default:** honours `prefers-reduced-motion`, falls back to CSS when WebGL is unavailable, keeps content visible without JS, and supports keyboard navigation.
 
 ---
 
 ## 🛠️ Tech Stack
 
-- **Framework:** [Astro](https://astro.build/)
-- **Styling:** Vanilla Modern CSS with CSS Custom Properties, Glassmorphism, and Fluid clamp typography
-- **Typography:** [Plus Jakarta Sans](https://fonts.google.com/specimen/Plus+Jakarta+Sans) & [JetBrains Mono](https://fonts.google.com/specimen/JetBrains+Mono)
-- **Deployment:** GitHub Pages via automated GitHub Actions CI/CD workflow
+- **Framework:** [Astro](https://astro.build/) (static output)
+- **Motion:** [GSAP](https://gsap.com/) (ScrollTrigger, SplitText) + [Lenis](https://lenis.darkroom.engineering/) smooth scroll
+- **3D:** [Three.js](https://threejs.org/) with custom GLSL shaders, lazy-loaded behind the preloader
+- **Styling:** Vanilla CSS with custom-property tokens (`src/styles/global.css`)
+- **Typography:** Space Grotesk, Instrument Serif and JetBrains Mono
+- **Deployment:** GitHub Pages via GitHub Actions
+
+Content (experience, projects, skills, demo schemas) lives in `src/data/portfolioData.ts`.
 
 ---
 
 ## 🚀 Getting Started
 
 ### Prerequisites
-- Node.js 18+ (or latest LTS)
+- Node.js 22+
 - npm or yarn
 
 ### Installation & Development

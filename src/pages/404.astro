@@ -1,0 +1,36 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout title="404 — Lost in the void" description="This page drifted off into space.">
+  <section class="lost" data-scene='{"x":0,"y":0,"scale":1.3,"hue":0.9,"intensity":1,"distort":0.7}'>
+    <div class="container lost__inner">
+      <p class="eyebrow">Error 404</p>
+      <h1 class="lost__title" data-split="chars">Lost in <span class="serif accent">the void.</span></h1>
+      <p class="lead">This page drifted off into space. Let's get you back to solid ground.</p>
+      <a href="/" class="btn btn--solid" data-magnetic="0.3"><span data-magnetic-inner>Back home</span></a>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .lost {
+    min-height: 100svh;
+    display: flex;
+    align-items: center;
+    text-align: center;
+  }
+
+  .lost__inner {
+    display: grid;
+    justify-items: center;
+    gap: 1.75rem;
+  }
+
+  .lost__title {
+    font-size: clamp(3.5rem, 12vw, 10rem);
+    font-weight: 600;
+    line-height: 0.92;
+    letter-spacing: -0.06em;
+  }
+</style>

@@ -1,242 +1,396 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import Section from "../layouts/Section.astro";
-import SectionHeader from "../components/SectionHeader.astro";
-import ProjectCard from "../components/ProjectCard.astro";
-import ContactSection from "../components/ContactSection.astro";
-
+import ProjectArt from "../components/ProjectArt.astro";
+import Contact from "../components/Contact.astro";
 import { projectsData, personalInfo } from "../data/portfolioData";
 
-const categories = [
-  "All",
-  "Architecture & Engines",
-  "Web Applications",
-  "Leadership & Community",
-];
+const pad = (n: number) => String(n + 1).padStart(2, "0");
 ---
 
-<Layout
-  title={`Projects & Systems | ${personalInfo.name}`}
-  description="Explore technical case studies, declarative UI platforms, and web applications built by Rishabh Jain."
->
-  <Section spacing="sm">
-    <!-- Page Breadcrumb & Header -->
-    <div class="projects-page-hero">
-      <a href="/" class="back-link">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="19" y1="12" x2="5" y2="12"></line>
-          <polyline points="12 19 5 12 12 5"></polyline>
-        </svg>
-        <span>Back to Overview</span>
-      </a>
-
-      <div class="page-title-block" data-reveal>
-        <span class="badge badge-accent">PORTFOLIO SHOWCASE</span>
-        <h1 class="page-title">
-          Projects &amp; <span class="accent-gradient-text">Architectural Systems</span>
-        </h1>
-        <p class="page-subtitle">
-          In-depth case studies, declarative form rendering engines, and production web applications built for scalability, high performance, and delightful user ergonomics.
-        </p>
-      </div>
-
-      <!-- Filter Tabs -->
-      <div class="filter-tabs-wrapper">
-        <div class="filter-tabs" role="tablist">
-          <span class="tab-glide" aria-hidden="true"></span>
-          {
-            categories.map((cat, i) => (
-              <button
-                class={`filter-tab-btn ${i === 0 ? "active" : ""}`}
-                data-category={cat}
-                role="tab"
-                aria-selected={i === 0 ? "true" : "false"}
-              >
-                {cat}
-              </button>
-            ))
-          }
-        </div>
-      </div>
+<Layout title={`Projects — ${personalInfo.name}`} description="Platforms, declarative UI systems and client applications.">
+  <section class="section page-head" data-scene='{"x":0.5,"y":0.25,"scale":0.75,"hue":0.4,"intensity":1,"distort":0.3}'>
+    <div class="container">
+      <p class="eyebrow" data-reveal>Archive — {projectsData.length} projects</p>
+      <h1 class="display page-head__title" data-split="chars">All <span class="serif">work</span></h1>
+      <p class="lead" data-reveal>
+        Platforms, declarative UI systems and client applications, built for performance and scale. Open any row for the
+        full story.
+      </p>
     </div>
-  </Section>
+  </section>
 
-  <!-- Projects Grid -->
-  <Section spacing="sm">
-    <div class="all-projects-grid" id="projects-grid" data-reveal-group>
+  <section class="plist" data-scene='{"x":0.65,"y":-0.45,"scale":0.38,"intensity":0.6,"hue":0.55,"distort":0.25}'>
+    <div class="container">
+      <ul class="plist__rows" data-reveal="stagger">
+        {
+          projectsData.map((p, i) => (
+            <li class="prow" id={p.id} data-prow data-art={p.id}>
+              <button type="button" class="prow__head" aria-expanded="false" aria-controls={`${p.id}-body`} data-cursor="Open">
+                <span class="prow__index mono">{pad(i)}</span>
+                <span class="prow__title">{p.title}</span>
+                <span class="prow__cat mono">{p.category}</span>
+                <span class="prow__year mono">{p.year}</span>
+                <span class="prow__plus" aria-hidden="true" />
+              </button>
+              <div class="prow__body" id={`${p.id}-body`} role="region" aria-label={p.title} hidden>
+                <div class="prow__grid">
+                  <div class="prow__art">
+                    <ProjectArt id={p.id} />
+                  </div>
+                  <div class="prow__detail">
+                    <p class="prow__sub serif">{p.subtitle}</p>
+                    <p class="prow__desc">{p.longDescription ?? p.description}</p>
+                    <div class="prow__cols">
+                      <div>
+                        <p class="prow__label mono">Impact</p>
+                        <ul class="prow__list">
+                          {p.impact.map((x) => (
+                            <li>{x}</li>
+                          ))}
+                        </ul>
+                      </div>
+                      <div>
+                        <p class="prow__label mono">Highlights</p>
+                        <ul class="prow__list">
+                          {p.highlights.map((x) => (
+                            <li>{x}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                    <div>
+                      <p class="prow__label mono">Role · {p.role}</p>
+                      <ul class="prow__chips">
+                        {p.techStack.map((t) => (
+                          <li class="chip">{t}</li>
+                        ))}
+                      </ul>
+                    </div>
+                    <div class="prow__actions">
+                      {p.demoUrl && (
+                        <a
+                          class="btn btn--solid"
+                          href={p.demoUrl.startsWith("#") ? "/#engine" : p.demoUrl}
+                          {...(p.demoUrl.startsWith("http") ? { target: "_blank", rel: "noopener" } : {})}
+                        >
+                          {p.demoUrl.startsWith("#") ? "Try the live engine" : "Live demo"}
+                        </a>
+                      )}
+                      {p.githubUrl && (
+                        <a class="btn" href={p.githubUrl} target="_blank" rel="noopener">
+                          GitHub ↗
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <div class="preview" data-preview aria-hidden="true">
       {
-        projectsData.map((project) => (
-          <div class="project-grid-item" data-category={project.category}>
-            <ProjectCard project={project} featured={project.featured} />
+        projectsData.map((p) => (
+          <div class="preview__item" data-preview-item={p.id}>
+            <ProjectArt id={p.id} />
           </div>
         ))
       }
     </div>
-  </Section>
+  </section>
 
-  <!-- Outreach CTA -->
-  <Section spacing="md">
-    <ContactSection />
-  </Section>
+  <Contact />
 </Layout>
 
-<script>
-  import { gsap } from "gsap";
-  import { EASE, initHoverGlide, onReady, prefersReducedMotion } from "../scripts/motion-utils";
-
-  // Project filtering logic
-  function initProjects() {
-    const filterBtns = Array.from(document.querySelectorAll<HTMLElement>(".filter-tab-btn"));
-    const projectItems = Array.from(document.querySelectorAll<HTMLElement>(".project-grid-item"));
-    const filterTabs = document.querySelector<HTMLElement>(".filter-tabs");
-    const tabGlide = document.querySelector<HTMLElement>(".tab-glide");
-
-    initHoverGlide(filterTabs, tabGlide, filterBtns);
-
-    filterBtns.forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const selectedCategory = btn.getAttribute("data-category");
-
-        // Update active button state
-        filterBtns.forEach((b) => {
-          b.classList.remove("active");
-          b.setAttribute("aria-selected", "false");
-        });
-        btn.classList.add("active");
-        btn.setAttribute("aria-selected", "true");
-
-        // Filter projects
-        const matched: HTMLElement[] = [];
-        projectItems.forEach((item) => {
-          const itemCategory = item.getAttribute("data-category");
-          const isMatch = selectedCategory === "All" || itemCategory === selectedCategory;
-          if (isMatch) {
-            item.style.display = "block";
-            matched.push(item);
-          } else {
-            item.style.display = "none";
-          }
-        });
-
-        if (prefersReducedMotion()) return;
-
-        gsap.fromTo(
-          matched,
-          { opacity: 0, y: 16 },
-          { opacity: 1, y: 0, duration: 0.45, stagger: 0.05, ease: EASE }
-        );
-      });
-    });
-  }
-
-  onReady(initProjects);
-</script>
-
 <style>
-  .projects-page-hero {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-    padding-top: 1rem;
+  .page-head {
+    padding-top: clamp(9rem, 18vw, 14rem);
+    padding-bottom: clamp(3rem, 6vw, 5rem);
   }
 
-  .back-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: var(--text-muted);
-    transition: color var(--transition-fast);
-  }
-
-  .back-link:hover {
-    color: var(--accent-primary);
-    transform: translateX(-2px);
-  }
-
-  .page-title-block {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    max-width: 800px;
-  }
-
-  .page-title {
-    line-height: 1.15;
-  }
-
-  .page-subtitle {
-    font-size: 1.15rem;
-    color: var(--text-secondary);
-    line-height: 1.65;
-  }
-
-  .filter-tabs-wrapper {
-    margin-top: 0.5rem;
-    padding-bottom: 0.5rem;
-    overflow-x: auto;
-  }
-
-  .filter-tabs {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.35rem;
-    background: var(--bg-surface);
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-full);
-  }
-
-  .tab-glide {
-    position: absolute;
-    top: 0.35rem;
-    bottom: 0.35rem;
-    left: 0;
-    width: 0;
-    opacity: 0;
-    background: var(--bg-surface-elevated);
-    border-radius: var(--radius-full);
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  .filter-tab-btn {
-    position: relative;
-    z-index: 1;
-    padding: 0.5rem 1rem;
-    font-size: 0.85rem;
-    font-weight: 600;
-    border-radius: var(--radius-full);
-    border: none;
-    background: transparent;
-    color: var(--text-secondary);
-    cursor: pointer;
-    transition: all var(--transition-fast);
-    white-space: nowrap;
-  }
-
-  .filter-tab-btn:hover {
-    color: var(--text-primary);
-    background: var(--bg-surface-elevated);
-  }
-
-  .filter-tab-btn.active {
-    background: var(--accent-primary);
-    color: #ffffff;
-    box-shadow: 0 2px 10px rgba(99, 102, 241, 0.35);
-  }
-
-  .all-projects-grid {
+  .page-head .container {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
     gap: 1.75rem;
   }
 
-  @media (max-width: 840px) {
-    .all-projects-grid {
+  .page-head__title {
+    font-size: clamp(4rem, 15vw, 14rem);
+  }
+
+  .plist__rows {
+    border-top: 1px solid var(--line);
+  }
+
+  .prow {
+    border-bottom: 1px solid var(--line);
+  }
+
+  .prow__head {
+    position: relative;
+    display: grid;
+    grid-template-columns: 4rem minmax(0, 1fr) auto 7rem 2rem;
+    align-items: center;
+    gap: 1.5rem;
+    width: 100%;
+    padding: clamp(1.5rem, 3vw, 2.5rem) 0;
+    text-align: left;
+    isolation: isolate;
+  }
+
+  .prow__head::before {
+    content: "";
+    position: absolute;
+    inset: 0 calc(-1 * var(--gutter));
+    z-index: -1;
+    background: linear-gradient(90deg, rgba(200, 255, 77, 0.07), transparent 70%);
+    transform: scaleY(0);
+    transform-origin: bottom;
+    transition: transform 0.6s var(--ease-out);
+  }
+
+  .prow__head:hover::before,
+  .prow__head[aria-expanded="true"]::before {
+    transform: scaleY(1);
+  }
+
+  .prow__index,
+  .prow__cat,
+  .prow__year {
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+
+  .prow__title {
+    font-size: clamp(1.6rem, 4vw, 3.5rem);
+    font-weight: 500;
+    letter-spacing: -0.04em;
+    line-height: 1.05;
+    transition: transform 0.7s var(--ease-out), color 0.4s;
+  }
+
+  .prow__head:hover .prow__title {
+    transform: translateX(1rem);
+  }
+
+  .prow__head[aria-expanded="true"] .prow__title {
+    color: var(--accent);
+  }
+
+  .prow__year {
+    text-align: right;
+  }
+
+  .prow__plus {
+    position: relative;
+    width: 1.25rem;
+    height: 1.25rem;
+    justify-self: end;
+  }
+
+  .prow__plus::before,
+  .prow__plus::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 1.5px;
+    background: currentColor;
+    transition: transform 0.5s var(--ease-out);
+  }
+
+  .prow__plus::after {
+    transform: rotate(90deg);
+  }
+
+  .prow__head[aria-expanded="true"] .prow__plus::after {
+    transform: rotate(0deg);
+  }
+
+  .prow__body {
+    overflow: hidden;
+  }
+
+  .prow__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: clamp(1.5rem, 4vw, 4rem);
+    padding: 0.5rem 0 3rem 5.5rem;
+  }
+
+  .prow__art {
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    border-radius: var(--radius);
+    border: 1px solid var(--line);
+  }
+
+  .prow__detail {
+    display: grid;
+    gap: 1.5rem;
+    align-content: start;
+  }
+
+  .prow__sub {
+    font-size: clamp(1.4rem, 2.2vw, 2rem);
+    color: var(--fg);
+  }
+
+  .prow__desc {
+    color: var(--fg-soft);
+    font-size: 1.05rem;
+  }
+
+  .prow__cols {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem;
+  }
+
+  .prow__label {
+    margin-bottom: 0.6rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .prow__list {
+    display: grid;
+    gap: 0.5rem;
+    font-size: 0.93rem;
+    color: var(--fg-soft);
+  }
+
+  .prow__list li::before {
+    content: "→ ";
+    color: var(--accent);
+  }
+
+  .prow__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .prow__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .preview {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 5;
+    width: 340px;
+    aspect-ratio: 4 / 3;
+    margin: -128px 0 0 -170px;
+    border-radius: 16px;
+    overflow: hidden;
+    pointer-events: none;
+    opacity: 0;
+    visibility: hidden;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+  }
+
+  .preview__item {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+
+  .preview__item.is-active {
+    opacity: 1;
+  }
+
+  @media (max-width: 800px) {
+    .prow__head {
+      grid-template-columns: 2.5rem minmax(0, 1fr) 1.5rem;
+      gap: 1rem;
+    }
+
+    .prow__cat,
+    .prow__year {
+      display: none;
+    }
+
+    .prow__grid {
+      grid-template-columns: 1fr;
+      padding-left: 0;
+    }
+
+    .prow__cols {
       grid-template-columns: 1fr;
     }
   }
 </style>
+
+<script>
+  import { finePointer, gsap, onReady, reducedMotion, ScrollTrigger } from "../scripts/motion";
+
+  const rows = Array.from(document.querySelectorAll<HTMLElement>("[data-prow]"));
+
+  function setOpen(row: HTMLElement, open: boolean) {
+    const head = row.querySelector<HTMLButtonElement>(".prow__head")!;
+    const body = row.querySelector<HTMLElement>(".prow__body")!;
+    if ((head.getAttribute("aria-expanded") === "true") === open) return;
+    head.setAttribute("aria-expanded", String(open));
+    const done = () => ScrollTrigger.refresh();
+    if (open) {
+      body.hidden = false;
+      if (reducedMotion) return done();
+      gsap.fromTo(body, { height: 0 }, { height: "auto", duration: 1, ease: "expo.out", onComplete: done });
+      gsap.from(body.querySelectorAll(".prow__art, .prow__detail > *"), { opacity: 0, y: 30, stagger: 0.05, duration: 1, delay: 0.1 });
+    } else {
+      if (reducedMotion) return ((body.hidden = true), done());
+      gsap.to(body, { height: 0, duration: 0.7, ease: "expo.inOut", onComplete: () => ((body.hidden = true), gsap.set(body, { clearProps: "height" }), done()) });
+    }
+  }
+
+  rows.forEach((row) => {
+    const head = row.querySelector<HTMLButtonElement>(".prow__head")!;
+    head.addEventListener("click", () => setOpen(row, head.getAttribute("aria-expanded") !== "true"));
+  });
+
+  // Deep links from the home page reel open their row.
+  const fromHash = () => {
+    const row = location.hash && rows.find((r) => `#${r.id}` === location.hash);
+    if (row) setOpen(row, true);
+  };
+  onReady(fromHash);
+  window.addEventListener("hashchange", fromHash);
+
+  // Floating preview that trails the cursor over closed rows.
+  if (finePointer && !reducedMotion) {
+    const preview = document.querySelector<HTMLElement>("[data-preview]")!;
+    const items = Array.from(preview.querySelectorAll<HTMLElement>("[data-preview-item]"));
+    const x = gsap.quickTo(preview, "x", { duration: 0.6, ease: "power3" });
+    const y = gsap.quickTo(preview, "y", { duration: 0.6, ease: "power3" });
+    const rot = gsap.quickTo(preview, "rotation", { duration: 0.8, ease: "power3" });
+    let lastX = 0;
+
+    window.addEventListener("pointermove", (e) => {
+      x(e.clientX);
+      y(e.clientY);
+      rot(gsap.utils.clamp(-10, 10, (e.clientX - lastX) * 0.6));
+      lastX = e.clientX;
+    });
+
+    rows.forEach((row) => {
+      const head = row.querySelector<HTMLElement>(".prow__head")!;
+      head.addEventListener("pointerenter", () => {
+        if (head.getAttribute("aria-expanded") === "true") return;
+        items.forEach((it) => it.classList.toggle("is-active", it.dataset.previewItem === row.dataset.art));
+        gsap.to(preview, { autoAlpha: 1, scale: 1, duration: 0.5, ease: "expo.out" });
+      });
+      head.addEventListener("pointerleave", () => gsap.to(preview, { autoAlpha: 0, scale: 0.85, duration: 0.4 }));
+      head.addEventListener("click", () => gsap.to(preview, { autoAlpha: 0, scale: 0.85, duration: 0.3 }));
+    });
+  }
+</script>
