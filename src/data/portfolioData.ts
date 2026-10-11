@@ -52,7 +52,7 @@ export const personalInfo = {
   location: "India",
   email: "rishabh2401jain@gmail.com",
   github: "https://github.com/Rishabh2324",
-  linkedin: "https://www.linkedin.com/in/rishabhjain2324",
+  linkedin: "https://www.linkedin.com/in/rishabhjain2401",
   status: "Open for high-impact frontend roles & technical consulting",
   availableForHire: true,
   yearsOfExperience: "4.5+",

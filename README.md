@@ -68,5 +68,5 @@ npm run preview
 **Rishabh Jain**  
 - **Role:** Senior Frontend Engineer (WDE-2)  
 - **Portfolio:** [https://rishabh2324.github.io/](https://rishabh2324.github.io/)  
-- **LinkedIn:** [https://www.linkedin.com/in/rishabhjain2324](https://www.linkedin.com/in/rishabhjain2324)  
+- **LinkedIn:** [https://www.linkedin.com/in/rishabhjain2401](https://www.linkedin.com/in/rishabhjain2401)  
 - **Email:** [rishabh2401jain@gmail.com](mailto:rishabh2401jain@gmail.com)  
