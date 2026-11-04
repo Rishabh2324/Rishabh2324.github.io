@@ -10,6 +10,7 @@ export interface ProjectItem {
   year: string;
   featured: boolean;
   demoUrl?: string;
+  videoUrl?: string;
   githubUrl?: string;
   role: string;
   highlights: string[];
@@ -143,6 +144,26 @@ export const experienceData: ExperienceItem[] = [
 ];
 
 export const projectsData: ProjectItem[] = [
+  {
+    id: "mynimantran",
+    title: "MyNimantran",
+    subtitle: "Live Invitation & Video Card Maker",
+    category: "Web Applications",
+    description: "A live web app for creating free online invitations, wedding cards and video nimantran patra in Hindi and English. Users pick a template, add photos and music, and share the result instantly on WhatsApp.",
+    longDescription: "Built and shipped end to end as a production product: template-driven invitation designs, photo and music personalization, bilingual (Hindi / English) content, and one-tap sharing, with SEO and analytics set up for organic discovery.",
+    impact: [
+      "Live in production at mynimantran.in",
+      "Template-based flow lets anyone build an invitation in minutes",
+      "Bilingual Hindi and English support for a wider audience",
+    ],
+    techStack: ["Next.js", "React", "TypeScript", "Turbopack", "Google Analytics", "SEO"],
+    year: "2025 - Present",
+    featured: true,
+    demoUrl: "https://mynimantran.in",
+    videoUrl: "/videos/mynimantran-launch.mp4",
+    role: "Founder & Full-Stack Developer",
+    highlights: ["Video Invitation Templates", "Hindi + English Content", "Instant WhatsApp Sharing"],
+  },
   {
     id: "config-driven-ui",
     title: "JSON-Driven Form Engine",

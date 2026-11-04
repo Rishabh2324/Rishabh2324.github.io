@@ -34,8 +34,14 @@ const pad = (n: number) => String(n + 1).padStart(2, "0");
               </button>
               <div class="prow__body" id={`${p.id}-body`} role="region" aria-label={p.title} hidden>
                 <div class="prow__grid">
-                  <div class="prow__art">
-                    <ProjectArt id={p.id} />
+                  <div class="prow__art" class:list={{ "prow__art--video": p.videoUrl }}>
+                    {p.videoUrl ? (
+                      <video class="prow__video" controls preload="metadata" playsinline aria-label={`${p.title} launch video`}>
+                        <source src={p.videoUrl} type="video/mp4" />
+                      </video>
+                    ) : (
+                      <ProjectArt id={p.id} />
+                    )}
                   </div>
                   <div class="prow__detail">
                     <p class="prow__sub serif">{p.subtitle}</p>
@@ -208,6 +214,18 @@ const pad = (n: number) => String(n + 1).padStart(2, "0");
 
   .prow__head[aria-expanded="true"] .prow__plus::after {
     transform: rotate(0deg);
+  }
+
+  .prow__art--video {
+    aspect-ratio: auto;
+    background: #000;
+  }
+
+  .prow__video {
+    display: block;
+    width: 100%;
+    max-height: 34rem;
+    object-fit: contain;
   }
 
   .prow__body {
